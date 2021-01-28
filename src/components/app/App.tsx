@@ -17,8 +17,8 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="row justify-content-center mt-3">
-        <div className="col-4">
+      <div className="row mt-3">
+        <div className="offset-md-4 col-4 d-flex justify-content-center">
           <button
             type="button"
             className="btn btn-primary"
