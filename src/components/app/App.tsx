@@ -11,8 +11,7 @@ interface IPost {
 }
 
 const App: React.FC = () => {
-  //
-  const [{ status, data, error }, doFetch] = useFetch<IPost[]>(
+  const [{ status, data }, doFetch] = useFetch<IPost[]>(
     "https://jsonplaceholder.typicode.com/posts"
   );
 
@@ -20,7 +19,12 @@ const App: React.FC = () => {
     <div className="container">
       <div className="row justify-content-center mt-3">
         <div className="col-4">
-          <button type="button" className="btn btn-primary" onClick={doFetch}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={doFetch}
+            disabled={status === "request"}
+          >
             Fetch
           </button>
         </div>
