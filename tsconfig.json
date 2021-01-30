@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
+    "outDir": "./distServer/",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -13,14 +11,12 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    /* "noEmit": true, */
+    "jsx": "react-jsx",
+    "sourceMap": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*", "demo/**/*", "index.d.ts"]
 }

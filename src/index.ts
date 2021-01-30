@@ -1,6 +1,15 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 
-type Action<K extends string, V = void> = V extends void ? { type: K } : { type: K } & V;
+type Action<K extends string, V = void> = V extends void
+  ? { type: K }
+  : { type: K } & V;
 
 type ActionFetch<T> =
   | Action<"request">
@@ -53,8 +62,14 @@ export const useFetch = <T>(
 
   const [state, dispatch] = useReducer(fetchReducer, initialState);
   const request = useCallback(() => dispatch({ type: "request" }), []);
-  const success = useCallback((payload) => dispatch({ type: "success", payload }), []);
-  const failure = useCallback((payload) => dispatch({ type: "failure", payload }), []);
+  const success = useCallback(
+    (payload) => dispatch({ type: "success", payload }),
+    []
+  );
+  const failure = useCallback(
+    (payload) => dispatch({ type: "failure", payload }),
+    []
+  );
 
   useEffect(() => {
     if (!url || !isFetch) {
