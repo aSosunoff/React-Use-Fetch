@@ -1,83 +1,324 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"));
-	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
-	else {
-		var a = typeof exports === 'object' ? factory(require("react")) : factory(root["react"]);
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(self, function(__WEBPACK_EXTERNAL_MODULE__297__) {
-return /******/ (() => { // webpackBootstrap
+define(["react"], (__WEBPACK_EXTERNAL_MODULE__297__) => /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 303:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 421:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "useFetch": () => (/* binding */ useFetch)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(297);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-const useFetch = (url, options, isCache = false) => {
-    const cache = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({});
-    const [isFetch, setFetch] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-    const initialState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => ({
-        status: "init",
-        error: undefined,
-        data: undefined,
-    }), []);
-    const fetchReducer = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((state, action) => {
-        switch (action.type) {
-            case "request":
-                return { ...initialState, status: "request" };
-            case "success":
-                return { ...initialState, status: "success", data: action.payload };
-            case "failure":
-                return { ...initialState, status: "failure", error: action.payload };
-            default:
-                return state;
-        }
-    }, [initialState]);
-    const [state, dispatch] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)(fetchReducer, initialState);
-    const request = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => dispatch({ type: "request" }), []);
-    const success = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((payload) => dispatch({ type: "success", payload }), []);
-    const failure = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)((payload) => dispatch({ type: "failure", payload }), []);
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-        if (!url || !isFetch) {
-            return;
-        }
-        let cancelRequest = false;
-        (async () => {
-            request();
-            if (isCache && cache.current[url]) {
-                setFetch(() => false);
-                !cancelRequest && success(cache.current[url]);
-                return;
-            }
-            try {
-                const response = await fetch(url, options);
-                const data = await response.json();
-                cache.current[url] = data;
-                setFetch(() => false);
-                !cancelRequest && success(data);
-            }
-            catch (error) {
-                setFetch(() => false);
-                !cancelRequest && failure(error.message);
-            }
-        })();
-        return () => {
-            cancelRequest = true;
-        };
-    }, [failure, isCache, isFetch, options, request, success, url]);
-    const doFetch = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => setFetch(() => true), []);
-    return [state, doFetch];
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
 };
 
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useFetch = void 0;
+
+var react_1 = __webpack_require__(297);
+
+var useFetch = function useFetch(url, options, isCache) {
+  if (isCache === void 0) {
+    isCache = false;
+  }
+
+  var cache = react_1.useRef({});
+
+  var _a = react_1.useState(false),
+      isFetch = _a[0],
+      setFetch = _a[1];
+
+  var initialState = react_1.useMemo(function () {
+    return {
+      status: "init",
+      error: undefined,
+      data: undefined
+    };
+  }, []);
+  var fetchReducer = react_1.useCallback(function (state, action) {
+    switch (action.type) {
+      case "request":
+        return __assign(__assign({}, initialState), {
+          status: "request"
+        });
+
+      case "success":
+        return __assign(__assign({}, initialState), {
+          status: "success",
+          data: action.payload
+        });
+
+      case "failure":
+        return __assign(__assign({}, initialState), {
+          status: "failure",
+          error: action.payload
+        });
+
+      default:
+        return state;
+    }
+  }, [initialState]);
+
+  var _b = react_1.useReducer(fetchReducer, initialState),
+      state = _b[0],
+      dispatch = _b[1];
+
+  var request = react_1.useCallback(function () {
+    return dispatch({
+      type: "request"
+    });
+  }, []);
+  var success = react_1.useCallback(function (payload) {
+    return dispatch({
+      type: "success",
+      payload: payload
+    });
+  }, []);
+  var failure = react_1.useCallback(function (payload) {
+    return dispatch({
+      type: "failure",
+      payload: payload
+    });
+  }, []);
+  react_1.useEffect(function () {
+    if (!url || !isFetch) {
+      return;
+    }
+
+    var cancelRequest = false;
+
+    (function () {
+      return __awaiter(void 0, void 0, void 0, function () {
+        var response, data, error_1;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              request();
+
+              if (isCache && cache.current[url]) {
+                setFetch(function () {
+                  return false;
+                });
+                !cancelRequest && success(cache.current[url]);
+                return [2
+                /*return*/
+                ];
+              }
+
+              _a.label = 1;
+
+            case 1:
+              _a.trys.push([1, 4,, 5]);
+
+              return [4
+              /*yield*/
+              , fetch(url, options)];
+
+            case 2:
+              response = _a.sent();
+              return [4
+              /*yield*/
+              , response.json()];
+
+            case 3:
+              data = _a.sent();
+              cache.current[url] = data;
+              setFetch(function () {
+                return false;
+              });
+              !cancelRequest && success(data);
+              return [3
+              /*break*/
+              , 5];
+
+            case 4:
+              error_1 = _a.sent();
+              setFetch(function () {
+                return false;
+              });
+              !cancelRequest && failure(error_1.message);
+              return [3
+              /*break*/
+              , 5];
+
+            case 5:
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    })();
+
+    return function () {
+      cancelRequest = true;
+    };
+  }, [failure, isCache, isFetch, options, request, success, url]);
+  var doFetch = react_1.useCallback(function () {
+    return setFetch(function () {
+      return true;
+    });
+  }, []);
+  return [state, doFetch];
+};
+
+exports.useFetch = useFetch;
 
 /***/ }),
 
@@ -107,59 +348,17 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__297__;
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(303);
+/******/ 	return __webpack_require__(421);
 /******/ })()
-;
-});
+);;
 //# sourceMappingURL=index.js.map

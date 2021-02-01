@@ -40,7 +40,7 @@ module.exports = {
         "index.min": ["./index.ts"],
       }
     : {
-        main: ["./index.tsx"],
+        index: ["./index.tsx"],
       },
 
   output: {
@@ -48,13 +48,13 @@ module.exports = {
     path: isDist
       ? path.resolve(__dirname, "./dist")
       : path.resolve(__dirname, "./distServer"),
-    ...(isDist ? { libraryTarget: "umd" } : {}),
+    ...(isDist ? { libraryTarget: "amd" } : {}),
   },
 
   externals: isDist
     ? {
-        react: "umd react",
-        "react-dom": "umd react-dom",
+        react: "amd react",
+        /* "react-dom": "amd react-dom", */
       }
     : undefined,
 
@@ -113,6 +113,9 @@ module.exports = {
           babelLoader,
           {
             loader: "ts-loader",
+            options: {
+              configFile: isDist ? "tsconfig.dist.json" : "tsconfig.json",
+            },
           },
         ],
       },

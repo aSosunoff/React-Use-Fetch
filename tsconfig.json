@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./distServer/",
-    "target": "es5",
-    "module": "esnext",
+    "target": "ES5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -16,7 +15,8 @@
     "isolatedModules": true,
     /* "noEmit": true, */
     "jsx": "react-jsx",
-    "sourceMap": true
+    "sourceMap": true,
+    "declaration": true
   },
   "include": ["src/**/*", "demo/**/*", "index.d.ts"]
 }
