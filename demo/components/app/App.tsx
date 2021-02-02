@@ -1,5 +1,6 @@
 import React from "react";
-import { useFetch } from "../../hooks/use-fetch";
+import { useFetch } from "../../../src";
+/* import { useFetch } from "../../../dist"; */
 import ErrorImg from "../error-img";
 import Spinner from "../spinner";
 
