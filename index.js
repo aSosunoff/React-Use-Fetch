@@ -42,6 +42,8 @@ Object.defineProperty(exports, "__esModule", ({
 
 var jsx_runtime_1 = __webpack_require__(246);
 
+var react_1 = __webpack_require__(378);
+
 var src_1 = __webpack_require__(819);
 /* import { useFetch } from "../../../dist"; */
 
@@ -57,6 +59,21 @@ var App = function App() {
       data = _b.data,
       doFetch = _a[1];
 
+  var doFetchWrapper = react_1.useCallback(function () {
+    setClear(false);
+    doFetch();
+  }, [doFetch]);
+
+  var _c = react_1.useState(false),
+      isClear = _c[0],
+      setClear = _c[1];
+
+  var clearHandler = react_1.useCallback(function () {
+    return setClear(true);
+  }, []);
+  var list = react_1.useMemo(function () {
+    return isClear ? [] : data;
+  }, [data, isClear]);
   return jsx_runtime_1.jsxs("div", __assign({
     className: "container"
   }, {
@@ -66,13 +83,26 @@ var App = function App() {
       children: jsx_runtime_1.jsx("div", __assign({
         className: "offset-md-4 col-4 d-flex justify-content-center"
       }, {
-        children: jsx_runtime_1.jsx("button", __assign({
-          type: "button",
-          className: "btn btn-primary",
-          onClick: doFetch,
-          disabled: status === "request"
+        children: jsx_runtime_1.jsxs("div", __assign({
+          className: "btn-group",
+          role: "group",
+          "aria-label": "Basic example"
         }, {
-          children: "Fetch"
+          children: [jsx_runtime_1.jsx("button", __assign({
+            type: "button",
+            className: "btn btn-primary",
+            onClick: doFetchWrapper,
+            disabled: status === "request"
+          }, {
+            children: "Fetch"
+          }), void 0), jsx_runtime_1.jsx("button", __assign({
+            type: "button",
+            className: "btn btn-primary",
+            onClick: clearHandler,
+            disabled: status === "request"
+          }, {
+            children: "Clear"
+          }), void 0)]
         }), void 0)
       }), void 0)
     }), void 0), jsx_runtime_1.jsx("div", __assign({
@@ -105,7 +135,7 @@ var App = function App() {
               }), void 0)]
             }, void 0)
           }, void 0), jsx_runtime_1.jsx("tbody", {
-            children: data === null || data === void 0 ? void 0 : data.map(function (_a) {
+            children: list === null || list === void 0 ? void 0 : list.map(function (_a) {
               var userId = _a.userId,
                   id = _a.id,
                   title = _a.title,
