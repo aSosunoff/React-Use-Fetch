@@ -121,7 +121,7 @@ const CONFIGS = {
             {
               loader: "ts-loader",
               options: {
-                configFile: "tsconfig.json",
+                configFile: "tsconfig.production.json",
               },
             },
           ],

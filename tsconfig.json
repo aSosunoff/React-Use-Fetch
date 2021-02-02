@@ -15,8 +15,7 @@
     "isolatedModules": true,
     /* "noEmit": true, */
     "jsx": "react-jsx",
-    "sourceMap": true,
-    "declaration": true
+    "sourceMap": true
   },
   "include": ["src/**/*", "demo/**/*", "index.d.ts"]
 }
