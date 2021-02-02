@@ -10,135 +10,229 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const fileName = (ext) => `[name].${ext}`;
 
-const isDist = process.env.DIST === "true";
+const isDeploy = process.env.GP_DEPLOY === "true";
 
-console.log(isDist);
+const publicUrl = process.env.PUBLIC_URL;
 
 const babelLoader = {
   loader: "babel-loader",
-  ...(isDist
-    ? {}
-    : {
-        options: {
-          plugins: [require.resolve("react-refresh/babel")],
-        },
-      }),
+  options: {
+    plugins: [require.resolve("react-refresh/babel")],
+  },
 };
 
-module.exports = {
-  mode: isDist ? "production" : "development",
-
-  context: isDist
-    ? path.resolve(__dirname, "./src")
-    : path.resolve(__dirname, "./demo"),
-
-  devtool: isDist ? "source-map" : "eval-source-map",
-
-  entry: isDist
-    ? {
-        index: ["./index.ts"],
-        "index.min": ["./index.ts"],
-      }
-    : {
-        index: ["./index.tsx"],
-      },
-
-  output: {
-    filename: fileName("js"),
-    path: isDist
-      ? path.resolve(__dirname, "./dist")
-      : path.resolve(__dirname, "./distServer"),
-    ...(isDist ? { libraryTarget: "amd" } : {}),
+const CONFIGS = {
+  dist: {
+    mode: "production",
+    context: path.resolve(__dirname, "./src"),
+    devtool: "source-map",
+    entry: {
+      index: ["./index.ts"],
+      "index.min": ["./index.ts"],
+    },
+    output: {
+      filename: fileName("js"),
+      path: path.resolve(__dirname, "./dist"),
+      libraryTarget: "amd",
+    },
+    externals: {
+      react: "amd react",
+      /* "react-dom": "amd react-dom", */
+    },
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          include: /\.min\.js/,
+        }),
+        new OptimizeCssAssetsPlugin({}),
+      ],
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".scss"],
+    },
+    plugins: [new CleanWebpackPlugin()],
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [
+            "babel-loader",
+            {
+              loader: "ts-loader",
+              options: {
+                configFile: "tsconfig.dist.json",
+              },
+            },
+          ],
+        },
+      ],
+    },
   },
+  production: {
+    mode: "production",
+    context: path.resolve(__dirname, "./demo"),
+    devtool: "source-map",
+    entry: {
+      index: ["./index.tsx"],
+      "index.min": ["./index.tsx"],
+    },
+    output: {
+      publicPath: isDeploy ? `${publicUrl}/` : "",
+      filename: fileName("js"),
+      path: path.resolve(__dirname, "./build"),
+    },
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          include: /\.min\.js/,
+        }),
+        new OptimizeCssAssetsPlugin({}),
+      ],
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".scss"],
+    },
+    plugins: [
+      new CleanWebpackPlugin(),
+      new MiniCssExtractPlugin({ filename: fileName("css") }),
+      new HTMLWebpackPlugin({
+        template: "./index.html",
+        minify: {
+          collapseWhitespace: true,
+        },
+      }),
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: ["babel-loader"],
+        },
 
-  externals: isDist
-    ? {
-        react: "amd react",
-        /* "react-dom": "amd react-dom", */
-      }
-    : undefined,
+        {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [
+            "babel-loader",
+            {
+              loader: "ts-loader",
+              options: {
+                configFile: "tsconfig.json",
+              },
+            },
+          ],
+        },
 
-  devServer: isDist
-    ? undefined
-    : {
-        port: 9000,
-        hot: true,
-        compress: true,
-        publicPath: "/",
-        contentBase: path.join(__dirname, "./distServer"),
-        historyApiFallback: true,
-        writeToDisk: false,
-        stats: "minimal",
-      },
+        {
+          test: /\.(s[ac]|c)ss$/i,
+          use: [
+            "style-loader",
+            {
+              loader: "css-loader",
+              options: {
+                modules: {
+                  auto: true,
+                  localIdentName: "[name]__[local]",
+                },
+              },
+            },
+            "sass-loader",
+          ],
+        },
 
-  resolve: {
-    extensions: [".tsx", ".ts", ".js", ".scss"],
+        {
+          test: /\.(ttf|woff|woff2|eot|png|jpe?g|gif)$/i,
+          type: "asset/resource",
+        },
+      ],
+    },
   },
-
-  optimization: isDist
-    ? {
-        minimizer: [
-          new TerserPlugin({
-            include: /\.min\.js/,
-          }),
-          new OptimizeCssAssetsPlugin({}),
-        ].filter(Boolean),
-      }
-    : undefined,
-
-  plugins: [
-    isDist && new CleanWebpackPlugin(),
-    !isDist && new MiniCssExtractPlugin({ filename: fileName("css") }),
-    !isDist && new ReactRefreshWebpackPlugin(),
-    !isDist &&
+  default: {
+    mode: "development",
+    context: path.resolve(__dirname, "./demo"),
+    devtool: "eval-source-map",
+    entry: {
+      index: ["./index.tsx"],
+    },
+    output: {
+      filename: fileName("js"),
+      path: path.resolve(__dirname, "./distServer"),
+    },
+    devServer: {
+      port: 9000,
+      hot: true,
+      compress: true,
+      publicPath: "/",
+      contentBase: path.join(__dirname, "./distServer"),
+      historyApiFallback: true,
+      writeToDisk: false,
+      stats: "minimal",
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".scss"],
+    },
+    plugins: [
+      new MiniCssExtractPlugin({ filename: fileName("css") }),
+      new ReactRefreshWebpackPlugin(),
       new HTMLWebpackPlugin({
         template: "./index.html",
         minify: {
           collapseWhitespace: false,
         },
       }),
-  ].filter(Boolean),
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: [babelLoader],
+        },
 
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: [babelLoader],
-      },
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: [
-          babelLoader,
-          {
-            loader: "ts-loader",
-            options: {
-              configFile: isDist ? "tsconfig.dist.json" : "tsconfig.json",
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(s[ac]|c)ss$/i,
-        use: [
-          "style-loader",
-          {
-            loader: "css-loader",
-            options: {
-              modules: {
-                auto: true,
-                localIdentName: "[name]__[local]",
+        {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [
+            babelLoader,
+            {
+              loader: "ts-loader",
+              options: {
+                configFile: "tsconfig.json",
               },
             },
-          },
-          "sass-loader",
-        ],
-      },
-      {
-        test: /\.(ttf|woff|woff2|eot|png|jpe?g|gif)$/i,
-        type: "asset/resource",
-      },
-    ],
+          ],
+        },
+
+        {
+          test: /\.(s[ac]|c)ss$/i,
+          use: [
+            "style-loader",
+            {
+              loader: "css-loader",
+              options: {
+                modules: {
+                  auto: true,
+                  localIdentName: "[name]__[local]",
+                },
+              },
+            },
+            "sass-loader",
+          ],
+        },
+
+        {
+          test: /\.(ttf|woff|woff2|eot|png|jpe?g|gif)$/i,
+          type: "asset/resource",
+        },
+      ],
+    },
   },
+};
+
+const config = CONFIGS[process.env.CONFIG] || CONFIGS.default;
+
+module.exports = {
+  ...config,
 };
