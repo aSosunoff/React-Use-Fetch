@@ -16,6 +16,8 @@ const isDeploy = process.env.GP_DEPLOY === "true";
 
 const publicUrl = process.env.PUBLIC_URL;
 
+const pathDemo = process.env.DEMO_PATH || "demo";
+
 const babelLoader = {
   loader: "babel-loader",
   options: {
@@ -153,7 +155,7 @@ const CONFIGS = {
   },
   default: {
     mode: "development",
-    context: path.resolve(__dirname, "./demo"),
+    context: path.resolve(__dirname, `./${pathDemo}`),
     devtool: "eval-source-map",
     entry: {
       index: ["./index.tsx"],
