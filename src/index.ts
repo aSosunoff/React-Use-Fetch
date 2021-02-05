@@ -14,12 +14,12 @@ type Action<K extends string, V = void> = V extends void
 type ActionFetch<T> =
   | Action<"request">
   | Action<"success", { payload: T }>
-  | Action<"failure", { payload: string }>;
+  | Action<"failure", { payload: any }>;
 
 interface State<T> {
   status: "init" | "request" | "failure" | "success";
   data?: T;
-  error?: string;
+  error?: any;
 }
 
 interface Cache<T> {
@@ -28,9 +28,10 @@ interface Cache<T> {
 
 export const useFetch = <T>(
   url: string,
-  options?: RequestInit,
   isCache: boolean = false
-): [State<T>, () => void] => {
+): [State<T>, (options?: RequestInit) => void] => {
+  const [options, setOptions] = useState<RequestInit>();
+
   const cache = useRef<Cache<T>>({});
 
   const [isFetch, setFetch] = useState(false);
@@ -96,7 +97,7 @@ export const useFetch = <T>(
         !cancelRequest && success(data);
       } catch (error) {
         setFetch(() => false);
-        !cancelRequest && failure(error.message);
+        !cancelRequest && failure(error);
       }
     })();
 
@@ -105,7 +106,10 @@ export const useFetch = <T>(
     };
   }, [failure, isCache, isFetch, options, request, success, url]);
 
-  const doFetch = useCallback(() => setFetch(() => true), []);
+  const doFetch = useCallback((options?: RequestInit) => {
+    setOptions(() => options);
+    setFetch(() => true);
+  }, []);
 
   return [state, doFetch];
 };
