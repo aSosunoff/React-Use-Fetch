@@ -173,16 +173,20 @@ exports.useFetch = void 0;
 
 var react_1 = __webpack_require__(297);
 
-var useFetch = function useFetch(url, options, isCache) {
+var useFetch = function useFetch(url, isCache) {
   if (isCache === void 0) {
     isCache = false;
   }
 
+  var _a = react_1.useState(),
+      options = _a[0],
+      setOptions = _a[1];
+
   var cache = react_1.useRef({});
 
-  var _a = react_1.useState(false),
-      isFetch = _a[0],
-      setFetch = _a[1];
+  var _b = react_1.useState(false),
+      isFetch = _b[0],
+      setFetch = _b[1];
 
   var initialState = react_1.useMemo(function () {
     return {
@@ -215,9 +219,9 @@ var useFetch = function useFetch(url, options, isCache) {
     }
   }, [initialState]);
 
-  var _b = react_1.useReducer(fetchReducer, initialState),
-      state = _b[0],
-      dispatch = _b[1];
+  var _c = react_1.useReducer(fetchReducer, initialState),
+      state = _c[0],
+      dispatch = _c[1];
 
   var request = react_1.useCallback(function () {
     return dispatch({
@@ -278,21 +282,29 @@ var useFetch = function useFetch(url, options, isCache) {
 
             case 3:
               data = _a.sent();
-              cache.current[url] = data;
-              setFetch(function () {
-                return false;
-              });
-              !cancelRequest && success(data);
+
+              if (!cancelRequest) {
+                cache.current[url] = data;
+                setFetch(function () {
+                  return false;
+                });
+                success(data);
+              }
+
               return [3
               /*break*/
               , 5];
 
             case 4:
               error_1 = _a.sent();
-              setFetch(function () {
-                return false;
-              });
-              !cancelRequest && failure(error_1.message);
+
+              if (!cancelRequest) {
+                setFetch(function () {
+                  return false;
+                });
+                failure(error_1);
+              }
+
               return [3
               /*break*/
               , 5];
@@ -310,8 +322,11 @@ var useFetch = function useFetch(url, options, isCache) {
       cancelRequest = true;
     };
   }, [failure, isCache, isFetch, options, request, success, url]);
-  var doFetch = react_1.useCallback(function () {
-    return setFetch(function () {
+  var doFetch = react_1.useCallback(function (options) {
+    setOptions(function () {
+      return options;
+    });
+    setFetch(function () {
       return true;
     });
   }, []);
