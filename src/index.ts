@@ -28,7 +28,7 @@ interface Cache<T> {
 
 export const useFetch = <T>(
   url: string,
-  isCache: boolean = false
+  isCache = false
 ): [State<T>, (options?: RequestInit) => void] => {
   const [options, setOptions] = useState<RequestInit>();
 
@@ -92,12 +92,16 @@ export const useFetch = <T>(
         const response = await fetch(url, options);
         const data = await response.json();
 
-        cache.current[url] = data;
-        setFetch(() => false);
-        !cancelRequest && success(data);
+        if (!cancelRequest) {
+          cache.current[url] = data;
+          setFetch(() => false);
+          success(data);
+        }
       } catch (error) {
-        setFetch(() => false);
-        !cancelRequest && failure(error);
+        if (!cancelRequest) {
+          setFetch(() => false);
+          failure(error);
+        }
       }
     })();
 
