@@ -664,21 +664,29 @@ var useFetch = function useFetch(url, isCache) {
 
             case 3:
               data = _a.sent();
-              cache.current[url] = data;
-              setFetch(function () {
-                return false;
-              });
-              !cancelRequest && success(data);
+
+              if (!cancelRequest) {
+                cache.current[url] = data;
+                setFetch(function () {
+                  return false;
+                });
+                success(data);
+              }
+
               return [3
               /*break*/
               , 5];
 
             case 4:
               error_1 = _a.sent();
-              setFetch(function () {
-                return false;
-              });
-              !cancelRequest && failure(error_1);
+
+              if (!cancelRequest) {
+                setFetch(function () {
+                  return false;
+                });
+                failure(error_1);
+              }
+
               return [3
               /*break*/
               , 5];
