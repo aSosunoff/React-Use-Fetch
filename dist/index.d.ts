@@ -1,7 +1,6 @@
-interface State<T> {
+export interface State<T, TError = any> {
     status: "init" | "request" | "failure" | "success";
     data?: T;
-    error?: any;
+    error?: TError;
 }
-export declare const useFetch: <T>(url: string, isCache?: boolean) => [State<T>, (options?: RequestInit | undefined) => void];
-export {};
+export declare const useFetch: <TData, TError = any>(url: string, isCache?: boolean) => [State<TData, TError>, (options?: RequestInit | undefined) => void];

@@ -16,27 +16,27 @@ type ActionFetch<T> =
   | Action<"success", { payload: T }>
   | Action<"failure", { payload: any }>;
 
-interface State<T> {
+export interface State<T, TError = any> {
   status: "init" | "request" | "failure" | "success";
   data?: T;
-  error?: any;
+  error?: TError;
 }
 
 interface Cache<T> {
   [url: string]: T;
 }
 
-export const useFetch = <T>(
+export const useFetch = <TData, TError = any>(
   url: string,
   isCache = false
-): [State<T>, (options?: RequestInit) => void] => {
+): [State<TData, TError>, (options?: RequestInit) => void] => {
   const [options, setOptions] = useState<RequestInit>();
 
-  const cache = useRef<Cache<T>>({});
+  const cache = useRef<Cache<TData>>({});
 
   const [isFetch, setFetch] = useState(false);
 
-  const initialState = useMemo<State<T>>(
+  const initialState = useMemo<State<TData, TError>>(
     () => ({
       status: "init",
       error: undefined,
@@ -46,7 +46,10 @@ export const useFetch = <T>(
   );
 
   const fetchReducer = useCallback(
-    (state: State<T>, action: ActionFetch<T>): State<T> => {
+    (
+      state: State<TData, TError>,
+      action: ActionFetch<TData>
+    ): State<TData, TError> => {
       switch (action.type) {
         case "request":
           return { ...initialState, status: "request" };
