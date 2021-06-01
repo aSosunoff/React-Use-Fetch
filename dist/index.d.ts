@@ -3,4 +3,8 @@ export interface State<T, TError = any> {
     data?: T;
     error?: TError;
 }
-export declare const useFetch: <TData, TError = any>(url: string, isCache?: boolean) => [State<TData, TError>, (options?: RequestInit | undefined) => void];
+interface UseFetchOption extends RequestInit {
+    responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
+}
+export declare const useFetch: <TData, TError = any>(url: string, isCache?: boolean) => [State<TData, TError>, (options?: UseFetchOption | undefined) => void];
+export {};

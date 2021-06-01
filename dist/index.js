@@ -178,7 +178,7 @@ var useFetch = function useFetch(url, isCache) {
     isCache = false;
   }
 
-  var _a = react_1.useState(),
+  var _a = react_1.useState({}),
       options = _a[0],
       setOptions = _a[1];
 
@@ -249,9 +249,10 @@ var useFetch = function useFetch(url, isCache) {
 
     var doFetch = function doFetch() {
       return __awaiter(void 0, void 0, void 0, function () {
-        var response, body, data;
-        return __generator(this, function (_a) {
-          switch (_a.label) {
+        var response, body, data, _a;
+
+        return __generator(this, function (_b) {
+          switch (_b.label) {
             case 0:
               request();
 
@@ -270,7 +271,7 @@ var useFetch = function useFetch(url, isCache) {
               , fetch(url.toString(), options)];
 
             case 1:
-              response = _a.sent();
+              response = _b.sent();
               if (!!response.ok) return [3
               /*break*/
               , 3];
@@ -279,17 +280,103 @@ var useFetch = function useFetch(url, isCache) {
               , response.json()];
 
             case 2:
-              body = _a.sent();
+              body = _b.sent();
               throw body;
 
             case 3:
+              data = null;
+              _a = options.responseType;
+
+              switch (_a) {
+                case "text":
+                  return [3
+                  /*break*/
+                  , 4];
+
+                case "json":
+                  return [3
+                  /*break*/
+                  , 6];
+
+                case "formData":
+                  return [3
+                  /*break*/
+                  , 8];
+
+                case "blob":
+                  return [3
+                  /*break*/
+                  , 10];
+
+                case "arrayBuffer":
+                  return [3
+                  /*break*/
+                  , 12];
+              }
+
+              return [3
+              /*break*/
+              , 14];
+
+            case 4:
+              return [4
+              /*yield*/
+              , response.text()];
+
+            case 5:
+              data = _b.sent();
+              return [3
+              /*break*/
+              , 15];
+
+            case 6:
               return [4
               /*yield*/
               , response.json()];
 
-            case 4:
-              data = _a.sent();
+            case 7:
+              data = _b.sent();
+              return [3
+              /*break*/
+              , 15];
 
+            case 8:
+              return [4
+              /*yield*/
+              , response.formData()];
+
+            case 9:
+              data = _b.sent();
+              return [3
+              /*break*/
+              , 15];
+
+            case 10:
+              return [4
+              /*yield*/
+              , response.blob()];
+
+            case 11:
+              data = _b.sent();
+              return [3
+              /*break*/
+              , 15];
+
+            case 12:
+              return [4
+              /*yield*/
+              , response.arrayBuffer()];
+
+            case 13:
+              data = _b.sent();
+              return [3
+              /*break*/
+              , 15];
+
+            case 14:
+              throw new Error("Not found type of response");
+
+            case 15:
               if (!cancelRequest) {
                 cache.current[url] = data;
                 setFetch(function () {
@@ -319,6 +406,12 @@ var useFetch = function useFetch(url, isCache) {
     };
   }, [failure, isCache, isFetch, options, request, success, url]);
   var doFetch = react_1.useCallback(function (options) {
+    if (options === void 0) {
+      options = {
+        responseType: "json"
+      };
+    }
+
     setOptions(function () {
       return options;
     });

@@ -26,11 +26,15 @@ interface Cache<T> {
   [url: string]: T;
 }
 
+interface UseFetchOption extends RequestInit {
+  responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
+}
+
 export const useFetch = <TData, TError = any>(
   url: string,
   isCache = false
-): [State<TData, TError>, (options?: RequestInit) => void] => {
-  const [options, setOptions] = useState<RequestInit>();
+): [State<TData, TError>, (options?: UseFetchOption) => void] => {
+  const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
 
   const cache = useRef<Cache<TData>>({});
 
@@ -98,7 +102,27 @@ export const useFetch = <TData, TError = any>(
         throw body;
       }
 
-      const data = await response.json();
+      let data = null;
+
+      switch (options.responseType) {
+        case "text":
+          data = await response.text();
+          break;
+        case "json":
+          data = await response.json();
+          break;
+        case "formData":
+          data = await response.formData();
+          break;
+        case "blob":
+          data = await response.blob();
+          break;
+        case "arrayBuffer":
+          data = await response.arrayBuffer();
+          break;
+        default:
+          throw new Error("Not found type of response");
+      }
 
       if (!cancelRequest) {
         cache.current[url] = data;
@@ -119,10 +143,13 @@ export const useFetch = <TData, TError = any>(
     };
   }, [failure, isCache, isFetch, options, request, success, url]);
 
-  const doFetch = useCallback((options?: RequestInit) => {
-    setOptions(() => options);
-    setFetch(() => true);
-  }, []);
+  const doFetch = useCallback(
+    (options: UseFetchOption = { responseType: "json" }) => {
+      setOptions(() => options);
+      setFetch(() => true);
+    },
+    []
+  );
 
   return [state, doFetch];
 };
