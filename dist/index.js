@@ -1,4 +1,4 @@
-define(["react"], (__WEBPACK_EXTERNAL_MODULE__297__) => /******/ (() => { // webpackBootstrap
+define(["react"], (__WEBPACK_EXTERNAL_MODULE__297__) => { return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
@@ -247,9 +247,9 @@ var useFetch = function useFetch(url, isCache) {
 
     var cancelRequest = false;
 
-    (function () {
+    var doFetch = function doFetch() {
       return __awaiter(void 0, void 0, void 0, function () {
-        var response, data, error_1;
+        var response, body, data;
         return __generator(this, function (_a) {
           switch (_a.label) {
             case 0:
@@ -265,22 +265,29 @@ var useFetch = function useFetch(url, isCache) {
                 ];
               }
 
-              _a.label = 1;
-
-            case 1:
-              _a.trys.push([1, 4,, 5]);
-
               return [4
               /*yield*/
-              , fetch(url, options)];
+              , fetch(url.toString(), options)];
 
-            case 2:
+            case 1:
               response = _a.sent();
+              if (!!response.ok) return [3
+              /*break*/
+              , 3];
               return [4
               /*yield*/
               , response.json()];
 
+            case 2:
+              body = _a.sent();
+              throw body;
+
             case 3:
+              return [4
+              /*yield*/
+              , response.json()];
+
+            case 4:
               data = _a.sent();
 
               if (!cancelRequest) {
@@ -291,33 +298,22 @@ var useFetch = function useFetch(url, isCache) {
                 success(data);
               }
 
-              return [3
-              /*break*/
-              , 5];
-
-            case 4:
-              error_1 = _a.sent();
-
-              if (!cancelRequest) {
-                setFetch(function () {
-                  return false;
-                });
-                failure(error_1);
-              }
-
-              return [3
-              /*break*/
-              , 5];
-
-            case 5:
               return [2
               /*return*/
               ];
           }
         });
       });
-    })();
+    };
 
+    doFetch()["catch"](function (error) {
+      if (!cancelRequest) {
+        setFetch(function () {
+          return false;
+        });
+        failure(error);
+      }
+    });
     return function () {
       cancelRequest = true;
     };
@@ -352,8 +348,9 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__297__;
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -370,10 +367,14 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__297__;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(447);
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(447);
+/******/ 	
+/******/ 	return __webpack_exports__;
 /******/ })()
-);;
+;
+});;
 //# sourceMappingURL=index.js.map

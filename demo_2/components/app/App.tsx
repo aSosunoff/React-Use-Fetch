@@ -16,8 +16,11 @@ interface IUser {
     updatedAt: string;
     username: string;
   };
+}
+
+interface IUserError {
   errors: {
-    [key: string]: [];
+    [key: string]: string[];
   };
 }
 
@@ -50,13 +53,13 @@ const App: React.FC = () => {
 
   const [token, setToken] = useLocalStorage<string>("token");
 
-  const [{ status, data }, doFetch] = useFetch<IUser>(
+  const [{ status, data, error }, doFetch] = useFetch<IUser, IUserError>(
     "https://conduit.productionready.io/api/users/login"
   );
 
   const errors = useMemo(() => {
-    if (data?.errors) {
-      return Object.entries(data.errors).reduce<string[]>(
+    if (status === "failure" && error) {
+      return Object.entries(error.errors).reduce<string[]>(
         (res, [key, value]) => {
           res.push(`${key}: ${value.join(", ")}`);
           return res;
@@ -65,7 +68,7 @@ const App: React.FC = () => {
       );
     }
     return [];
-  }, [data]);
+  }, [error, status]);
 
   const [user, setUser] = useState<{ email: string; password: string }>({
     email: "12weqweweeqwe3@mail.ru",
@@ -80,12 +83,10 @@ const App: React.FC = () => {
 
   /* ARTICLES */
 
-  const [
-    { status: statusArticles, data: dataArticles },
-    doFetchArticles,
-  ] = useFetch<IArticles>(
-    "https://conduit.productionready.io/api/articles?limit=10&offset=0"
-  );
+  const [{ status: statusArticles, data: dataArticles }, doFetchArticles] =
+    useFetch<IArticles>(
+      "https://conduit.productionready.io/api/articles?limit=10&offset=0"
+    );
 
   return (
     <div className="container">
@@ -117,8 +118,8 @@ const App: React.FC = () => {
             className="form-control"
             id="password"
             value={user.password}
-            onChange={(e) => {
-              setUser((user) => ({ ...user, password: e.target.value }));
+            onChange={({ target }) => {
+              setUser((user) => ({ ...user, password: target.value }));
             }}
           />
         </div>

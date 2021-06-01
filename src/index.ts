@@ -82,7 +82,7 @@ export const useFetch = <TData, TError = any>(
 
     let cancelRequest = false;
 
-    (async () => {
+    const doFetch = async () => {
       request();
 
       if (isCache && cache.current[url]) {
@@ -91,22 +91,28 @@ export const useFetch = <TData, TError = any>(
         return;
       }
 
-      try {
-        const response = await fetch(url, options);
-        const data = await response.json();
+      const response = await fetch(url.toString(), options);
 
-        if (!cancelRequest) {
-          cache.current[url] = data;
-          setFetch(() => false);
-          success(data);
-        }
-      } catch (error) {
-        if (!cancelRequest) {
-          setFetch(() => false);
-          failure(error);
-        }
+      if (!response.ok) {
+        const body = await response.json();
+        throw body;
       }
-    })();
+
+      const data = await response.json();
+
+      if (!cancelRequest) {
+        cache.current[url] = data;
+        setFetch(() => false);
+        success(data);
+      }
+    };
+
+    doFetch().catch((error) => {
+      if (!cancelRequest) {
+        setFetch(() => false);
+        failure(error);
+      }
+    });
 
     return () => {
       cancelRequest = true;
