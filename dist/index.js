@@ -406,14 +406,10 @@ var useFetch = function useFetch(url, isCache) {
     };
   }, [failure, isCache, isFetch, options, request, success, url]);
   var doFetch = react_1.useCallback(function (options) {
-    if (options === void 0) {
-      options = {
-        responseType: "json"
-      };
-    }
-
     setOptions(function () {
-      return options;
+      return __assign({
+        responseType: 'json'
+      }, options);
     });
     setFetch(function () {
       return true;

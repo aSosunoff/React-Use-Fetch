@@ -144,8 +144,11 @@ export const useFetch = <TData, TError = any>(
   }, [failure, isCache, isFetch, options, request, success, url]);
 
   const doFetch = useCallback(
-    (options: UseFetchOption = { responseType: "json" }) => {
-      setOptions(() => options);
+    (options?: UseFetchOption) => {
+      setOptions(() => ({
+        responseType: 'json',
+        ...options
+      }));
       setFetch(() => true);
     },
     []
