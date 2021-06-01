@@ -629,9 +629,9 @@ var useFetch = function useFetch(url, isCache) {
 
     var cancelRequest = false;
 
-    (function () {
+    var doFetch = function doFetch() {
       return __awaiter(void 0, void 0, void 0, function () {
-        var response, data, error_1;
+        var response, body, data;
         return __generator(this, function (_a) {
           switch (_a.label) {
             case 0:
@@ -647,22 +647,29 @@ var useFetch = function useFetch(url, isCache) {
                 ];
               }
 
-              _a.label = 1;
-
-            case 1:
-              _a.trys.push([1, 4,, 5]);
-
               return [4
               /*yield*/
-              , fetch(url, options)];
+              , fetch(url.toString(), options)];
 
-            case 2:
+            case 1:
               response = _a.sent();
+              if (!!response.ok) return [3
+              /*break*/
+              , 3];
               return [4
               /*yield*/
               , response.json()];
 
+            case 2:
+              body = _a.sent();
+              throw body;
+
             case 3:
+              return [4
+              /*yield*/
+              , response.json()];
+
+            case 4:
               data = _a.sent();
 
               if (!cancelRequest) {
@@ -673,33 +680,22 @@ var useFetch = function useFetch(url, isCache) {
                 success(data);
               }
 
-              return [3
-              /*break*/
-              , 5];
-
-            case 4:
-              error_1 = _a.sent();
-
-              if (!cancelRequest) {
-                setFetch(function () {
-                  return false;
-                });
-                failure(error_1);
-              }
-
-              return [3
-              /*break*/
-              , 5];
-
-            case 5:
               return [2
               /*return*/
               ];
           }
         });
       });
-    })();
+    };
 
+    doFetch()["catch"](function (error) {
+      if (!cancelRequest) {
+        setFetch(function () {
+          return false;
+        });
+        failure(error);
+      }
+    });
     return function () {
       cancelRequest = true;
     };
@@ -734,7 +730,7 @@ exports.useFetch = useFetch;
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "@keyframes Spinner-module__lds-double-ring{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes Spinner-module__lds-double-ring{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes Spinner-module__lds-double-ring_reverse{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(-360deg);transform:rotate(-360deg)}}@-webkit-keyframes Spinner-module__lds-double-ring_reverse{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(-360deg);transform:rotate(-360deg)}}.Spinner-module__lds-css{margin:0 auto}.Spinner-module__lds-double-ring{position:relative}.Spinner-module__lds-double-ring div{position:absolute;width:160px;height:160px;top:20px;left:20px;border-radius:50%;border:8px solid #000;border-color:#3d7ec0 transparent #3d7ec0 transparent;-webkit-animation:Spinner-module__lds-double-ring 1.5s linear infinite;animation:Spinner-module__lds-double-ring 1.5s linear infinite}.Spinner-module__lds-double-ring div:nth-child(2){width:140px;height:140px;top:30px;left:30px;border-color:transparent #cc4545 transparent #cc4545;-webkit-animation:Spinner-module__lds-double-ring_reverse 1.5s linear infinite;animation:Spinner-module__lds-double-ring_reverse 1.5s linear infinite}.Spinner-module__lds-double-ring{width:77px !important;height:77px !important;-webkit-transform:translate(-38.5px, -38.5px) scale(0.385) translate(38.5px, 38.5px);transform:translate(-38.5px, -38.5px) scale(0.385) translate(38.5px, 38.5px)}\n", "",{"version":3,"sources":["webpack://./components/spinner/Spinner.module.scss"],"names":[],"mappings":"AAAA,2CACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,gCAAiC,CACjC,wBAAyB,CAAA,CAI7B,mDACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,gCAAiC,CACjC,wBAAyB,CAAA,CAG7B,mDACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,iCAAkC,CAClC,yBAA0B,CAAA,CAG9B,2DACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,iCAAkC,CAClC,yBAA0B,CAAA,CAI9B,yBACE,aAAc,CACf,iCAGC,iBAAkB,CACnB,qCAEC,iBAAkB,CAClB,WAAY,CACZ,YAAa,CACb,QAAS,CACT,SAAU,CACV,iBAAkB,CAClB,qBAAsB,CACtB,oDAAqD,CACrD,sEAAuD,CACvD,8DAA+C,CAChD,kDAEC,WAAY,CACZ,YAAa,CACb,QAAS,CACT,SAAU,CACV,oDAAqD,CACrD,8EAA+D,CAC/D,sEAAuD,CACxD,iCAEC,qBAAsB,CACtB,sBAAuB,CACvB,oFAC2B,CAC3B,4EAA6E","sourcesContent":["@keyframes lds-double-ring {\r\n  0% {\r\n    -webkit-transform: rotate(0);\r\n    transform: rotate(0);\r\n  }\r\n  100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\r\n  }\r\n}\r\n\r\n@-webkit-keyframes lds-double-ring {\r\n  0% {\r\n    -webkit-transform: rotate(0);\r\n    transform: rotate(0);\r\n  }\r\n  100% {\r\n    -webkit-transform: rotate(360deg);\r\n    transform: rotate(360deg);\r\n  }\r\n}\r\n@keyframes lds-double-ring_reverse {\r\n  0% {\r\n    -webkit-transform: rotate(0);\r\n    transform: rotate(0);\r\n  }\r\n  100% {\r\n    -webkit-transform: rotate(-360deg);\r\n    transform: rotate(-360deg);\r\n  }\r\n}\r\n@-webkit-keyframes lds-double-ring_reverse {\r\n  0% {\r\n    -webkit-transform: rotate(0);\r\n    transform: rotate(0);\r\n  }\r\n  100% {\r\n    -webkit-transform: rotate(-360deg);\r\n    transform: rotate(-360deg);\r\n  }\r\n}\r\n\r\n.lds-css {\r\n  margin: 0 auto;\r\n}\r\n\r\n.lds-double-ring {\r\n  position: relative;\r\n}\r\n.lds-double-ring div {\r\n  position: absolute;\r\n  width: 160px;\r\n  height: 160px;\r\n  top: 20px;\r\n  left: 20px;\r\n  border-radius: 50%;\r\n  border: 8px solid #000;\r\n  border-color: #3d7ec0 transparent #3d7ec0 transparent;\r\n  -webkit-animation: lds-double-ring 1.5s linear infinite;\r\n  animation: lds-double-ring 1.5s linear infinite;\r\n}\r\n.lds-double-ring div:nth-child(2) {\r\n  width: 140px;\r\n  height: 140px;\r\n  top: 30px;\r\n  left: 30px;\r\n  border-color: transparent #cc4545 transparent #cc4545;\r\n  -webkit-animation: lds-double-ring_reverse 1.5s linear infinite;\r\n  animation: lds-double-ring_reverse 1.5s linear infinite;\r\n}\r\n.lds-double-ring {\r\n  width: 77px !important;\r\n  height: 77px !important;\r\n  -webkit-transform: translate(-38.5px, -38.5px) scale(0.385)\r\n    translate(38.5px, 38.5px);\r\n  transform: translate(-38.5px, -38.5px) scale(0.385) translate(38.5px, 38.5px);\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "@keyframes Spinner-module__lds-double-ring{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes Spinner-module__lds-double-ring{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes Spinner-module__lds-double-ring_reverse{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(-360deg);transform:rotate(-360deg)}}@-webkit-keyframes Spinner-module__lds-double-ring_reverse{0%{-webkit-transform:rotate(0);transform:rotate(0)}100%{-webkit-transform:rotate(-360deg);transform:rotate(-360deg)}}.Spinner-module__lds-css{margin:0 auto}.Spinner-module__lds-double-ring{position:relative}.Spinner-module__lds-double-ring div{position:absolute;width:160px;height:160px;top:20px;left:20px;border-radius:50%;border:8px solid #000;border-color:#3d7ec0 transparent #3d7ec0 transparent;-webkit-animation:Spinner-module__lds-double-ring 1.5s linear infinite;animation:Spinner-module__lds-double-ring 1.5s linear infinite}.Spinner-module__lds-double-ring div:nth-child(2){width:140px;height:140px;top:30px;left:30px;border-color:transparent #cc4545 transparent #cc4545;-webkit-animation:Spinner-module__lds-double-ring_reverse 1.5s linear infinite;animation:Spinner-module__lds-double-ring_reverse 1.5s linear infinite}.Spinner-module__lds-double-ring{width:77px !important;height:77px !important;-webkit-transform:translate(-38.5px, -38.5px) scale(0.385) translate(38.5px, 38.5px);transform:translate(-38.5px, -38.5px) scale(0.385) translate(38.5px, 38.5px)}\n", "",{"version":3,"sources":["webpack://./components/spinner/Spinner.module.scss"],"names":[],"mappings":"AAAA,2CACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,gCAAiC,CACjC,wBAAyB,CAAA,CAI7B,mDACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,gCAAiC,CACjC,wBAAyB,CAAA,CAG7B,mDACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,iCAAkC,CAClC,yBAA0B,CAAA,CAG9B,2DACE,GACE,2BAA4B,CAC5B,mBAAoB,CAEtB,KACE,iCAAkC,CAClC,yBAA0B,CAAA,CAI9B,yBACE,aAAc,CACf,iCAGC,iBAAkB,CACnB,qCAEC,iBAAkB,CAClB,WAAY,CACZ,YAAa,CACb,QAAS,CACT,SAAU,CACV,iBAAkB,CAClB,qBAAsB,CACtB,oDAAqD,CACrD,sEAAuD,CACvD,8DAA+C,CAChD,kDAEC,WAAY,CACZ,YAAa,CACb,QAAS,CACT,SAAU,CACV,oDAAqD,CACrD,8EAA+D,CAC/D,sEAAuD,CACxD,iCAEC,qBAAsB,CACtB,sBAAuB,CACvB,oFAC2B,CAC3B,4EAA6E","sourcesContent":["@keyframes lds-double-ring {\n  0% {\n    -webkit-transform: rotate(0);\n    transform: rotate(0);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n@-webkit-keyframes lds-double-ring {\n  0% {\n    -webkit-transform: rotate(0);\n    transform: rotate(0);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n@keyframes lds-double-ring_reverse {\n  0% {\n    -webkit-transform: rotate(0);\n    transform: rotate(0);\n  }\n  100% {\n    -webkit-transform: rotate(-360deg);\n    transform: rotate(-360deg);\n  }\n}\n@-webkit-keyframes lds-double-ring_reverse {\n  0% {\n    -webkit-transform: rotate(0);\n    transform: rotate(0);\n  }\n  100% {\n    -webkit-transform: rotate(-360deg);\n    transform: rotate(-360deg);\n  }\n}\n\n.lds-css {\n  margin: 0 auto;\n}\n\n.lds-double-ring {\n  position: relative;\n}\n.lds-double-ring div {\n  position: absolute;\n  width: 160px;\n  height: 160px;\n  top: 20px;\n  left: 20px;\n  border-radius: 50%;\n  border: 8px solid #000;\n  border-color: #3d7ec0 transparent #3d7ec0 transparent;\n  -webkit-animation: lds-double-ring 1.5s linear infinite;\n  animation: lds-double-ring 1.5s linear infinite;\n}\n.lds-double-ring div:nth-child(2) {\n  width: 140px;\n  height: 140px;\n  top: 30px;\n  left: 30px;\n  border-color: transparent #cc4545 transparent #cc4545;\n  -webkit-animation: lds-double-ring_reverse 1.5s linear infinite;\n  animation: lds-double-ring_reverse 1.5s linear infinite;\n}\n.lds-double-ring {\n  width: 77px !important;\n  height: 77px !important;\n  -webkit-transform: translate(-38.5px, -38.5px) scale(0.385)\n    translate(38.5px, 38.5px);\n  transform: translate(-38.5px, -38.5px) scale(0.385) translate(38.5px, 38.5px);\n}\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"lds-css": "Spinner-module__lds-css",
@@ -769,15 +765,15 @@ module.exports = function (cssWithMappingToString) {
       }
 
       return content;
-    }).join('');
+    }).join("");
   }; // import a list of modules into the list
   // eslint-disable-next-line func-names
 
 
   list.i = function (modules, mediaQuery, dedupe) {
-    if (typeof modules === 'string') {
+    if (typeof modules === "string") {
       // eslint-disable-next-line no-param-reassign
-      modules = [[null, modules, '']];
+      modules = [[null, modules, ""]];
     }
 
     var alreadyImportedModules = {};
@@ -831,7 +827,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -840,18 +836,18 @@ module.exports = function cssWithMappingToString(item) {
       content = _item[1],
       cssMapping = _item[3];
 
-  if (typeof btoa === 'function') {
+  if (typeof btoa === "function") {
     // eslint-disable-next-line no-undef
     var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));
     var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
     var sourceMapping = "/*# ".concat(data, " */");
     var sourceURLs = cssMapping.sources.map(function (source) {
-      return "/*# sourceURL=".concat(cssMapping.sourceRoot || '').concat(source, " */");
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || "").concat(source, " */");
     });
-    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+    return [content].concat(sourceURLs).concat([sourceMapping]).join("\n");
   }
 
-  return [content].join('\n');
+  return [content].join("\n");
 };
 
 /***/ }),
@@ -1708,8 +1704,9 @@ module.exports = function (list, options) {
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -1772,10 +1769,12 @@ module.exports = function (list, options) {
 /******/ 	})();
 /******/ 	
 /************************************************************************/
+/******/ 	
 /******/ 	// startup
-/******/ 	// Load entry module
+/******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	__webpack_require__(193);
+/******/ 	var __webpack_exports__ = __webpack_require__(193);
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
