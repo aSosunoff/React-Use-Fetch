@@ -1,3 +1,4 @@
+import { useHeaders } from "./useHeaderas";
 import {
   useCallback,
   useEffect,
@@ -33,12 +34,18 @@ interface UseFetchOption extends RequestInit {
 export const useFetch = <TData, TError = any>(
   url: string,
   isCache = false
-): [State<TData, TError>, (options?: UseFetchOption) => void] => {
+): [
+  State<TData, TError>,
+  (options?: UseFetchOption) => void,
+  ReturnType<typeof useHeaders>["headers"]
+] => {
   const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
 
   const cache = useRef<Cache<TData>>({});
 
   const [isFetch, setFetch] = useState(false);
+
+  const { headers, setHeadersHandler, clearHeadersHandler } = useHeaders();
 
   const initialState = useMemo<State<TData, TError>>(
     () => ({
@@ -95,7 +102,11 @@ export const useFetch = <TData, TError = any>(
         return;
       }
 
-      const response = await fetch(url.toString(), options);
+      const { responseType, ...optionsFetch } = options;
+
+      const response = await fetch(url.toString(), optionsFetch);
+
+      setHeadersHandler(response.headers);
 
       if (!response.ok) {
         const body = await response.json();
@@ -104,7 +115,7 @@ export const useFetch = <TData, TError = any>(
 
       let data = null;
 
-      switch (options.responseType) {
+      switch (responseType) {
         case "text":
           data = await response.text();
           break;
@@ -134,6 +145,7 @@ export const useFetch = <TData, TError = any>(
     doFetch().catch((error) => {
       if (!cancelRequest) {
         setFetch(() => false);
+        clearHeadersHandler();
         failure(error);
       }
     });
@@ -141,18 +153,25 @@ export const useFetch = <TData, TError = any>(
     return () => {
       cancelRequest = true;
     };
-  }, [failure, isCache, isFetch, options, request, success, url]);
+  }, [
+    clearHeadersHandler,
+    failure,
+    isCache,
+    isFetch,
+    options,
+    request,
+    setHeadersHandler,
+    success,
+    url,
+  ]);
 
-  const doFetch = useCallback(
-    (options?: UseFetchOption) => {
-      setOptions(() => ({
-        responseType: 'json',
-        ...options
-      }));
-      setFetch(() => true);
-    },
-    []
-  );
+  const doFetch = useCallback((options?: UseFetchOption) => {
+    setOptions(() => ({
+      responseType: "json",
+      ...options,
+    }));
+    setFetch(() => true);
+  }, []);
 
-  return [state, doFetch];
+  return [state, doFetch, headers];
 };
