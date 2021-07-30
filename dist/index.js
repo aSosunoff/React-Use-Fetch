@@ -166,10 +166,25 @@ var __generator = this && this.__generator || function (thisArg, body) {
   }
 };
 
+var __rest = this && this.__rest || function (s, e) {
+  var t = {};
+
+  for (var p in s) {
+    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  }
+
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.useFetch = void 0;
+
+var useHeaderas_1 = __webpack_require__(632);
 
 var react_1 = __webpack_require__(297);
 
@@ -187,6 +202,11 @@ var useFetch = function useFetch(url, isCache) {
   var _b = react_1.useState(false),
       isFetch = _b[0],
       setFetch = _b[1];
+
+  var _c = useHeaderas_1.useHeaders(),
+      headers = _c.headers,
+      setHeadersHandler = _c.setHeadersHandler,
+      clearHeadersHandler = _c.clearHeadersHandler;
 
   var initialState = react_1.useMemo(function () {
     return {
@@ -219,9 +239,9 @@ var useFetch = function useFetch(url, isCache) {
     }
   }, [initialState]);
 
-  var _c = react_1.useReducer(fetchReducer, initialState),
-      state = _c[0],
-      dispatch = _c[1];
+  var _d = react_1.useReducer(fetchReducer, initialState),
+      state = _d[0],
+      dispatch = _d[1];
 
   var request = react_1.useCallback(function () {
     return dispatch({
@@ -249,7 +269,7 @@ var useFetch = function useFetch(url, isCache) {
 
     var doFetch = function doFetch() {
       return __awaiter(void 0, void 0, void 0, function () {
-        var response, body, data, _a;
+        var responseType, optionsFetch, response, body, data, _a;
 
         return __generator(this, function (_b) {
           switch (_b.label) {
@@ -266,12 +286,14 @@ var useFetch = function useFetch(url, isCache) {
                 ];
               }
 
+              responseType = options.responseType, optionsFetch = __rest(options, ["responseType"]);
               return [4
               /*yield*/
-              , fetch(url.toString(), options)];
+              , fetch(url.toString(), optionsFetch)];
 
             case 1:
               response = _b.sent();
+              setHeadersHandler(response.headers);
               if (!!response.ok) return [3
               /*break*/
               , 3];
@@ -285,7 +307,7 @@ var useFetch = function useFetch(url, isCache) {
 
             case 3:
               data = null;
-              _a = options.responseType;
+              _a = responseType;
 
               switch (_a) {
                 case "text":
@@ -398,27 +420,89 @@ var useFetch = function useFetch(url, isCache) {
         setFetch(function () {
           return false;
         });
+        clearHeadersHandler();
         failure(error);
       }
     });
     return function () {
       cancelRequest = true;
     };
-  }, [failure, isCache, isFetch, options, request, success, url]);
+  }, [clearHeadersHandler, failure, isCache, isFetch, options, request, setHeadersHandler, success, url]);
   var doFetch = react_1.useCallback(function (options) {
     setOptions(function () {
       return __assign({
-        responseType: 'json'
+        responseType: "json"
       }, options);
     });
     setFetch(function () {
       return true;
     });
   }, []);
-  return [state, doFetch];
+  return [state, doFetch, headers];
 };
 
 exports.useFetch = useFetch;
+
+/***/ }),
+
+/***/ 632:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useHeaders = void 0;
+
+var react_1 = __webpack_require__(297);
+
+var useHeaders = function useHeaders() {
+  var _a = react_1.useState(null),
+      headers = _a[0],
+      setHeaders = _a[1];
+
+  var setHeadersHandler = react_1.useCallback(function (headers) {
+    var headersFinal = Array.from(headers.entries()).reduce(function (res, _a) {
+      var _b;
+
+      var key = _a[0],
+          value = _a[1];
+      return __assign(__assign({}, res), (_b = {}, _b[key] = value, _b));
+    }, {});
+    setHeaders(function () {
+      return headersFinal;
+    });
+  }, []);
+  var clearHeadersHandler = react_1.useCallback(function () {
+    setHeaders(function () {
+      return null;
+    });
+  }, []);
+  return {
+    headers: headers,
+    setHeadersHandler: setHeadersHandler,
+    clearHeadersHandler: clearHeadersHandler
+  };
+};
+
+exports.useHeaders = useHeaders;
 
 /***/ }),
 
