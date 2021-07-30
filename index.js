@@ -656,8 +656,6 @@ var useFetch = function useFetch(url, isCache) {
         return __generator(this, function (_b) {
           switch (_b.label) {
             case 0:
-              request();
-
               if (isCache && cache.current[url]) {
                 setFetch(function () {
                   return false;
@@ -811,6 +809,7 @@ var useFetch = function useFetch(url, isCache) {
     };
   }, [clearHeadersHandler, failure, isCache, isFetch, options, request, setHeadersHandler, success, url]);
   var doFetch = react_1.useCallback(function (options) {
+    request();
     setOptions(function () {
       return __assign({
         responseType: "json"
@@ -819,7 +818,7 @@ var useFetch = function useFetch(url, isCache) {
     setFetch(function () {
       return true;
     });
-  }, []);
+  }, [request]);
   return [state, doFetch, headers];
 };
 
