@@ -94,8 +94,6 @@ export const useFetch = <TData, TError = any>(
     let cancelRequest = false;
 
     const doFetch = async () => {
-      request();
-
       if (isCache && cache.current[url]) {
         setFetch(() => false);
         !cancelRequest && success(cache.current[url]);
@@ -165,13 +163,19 @@ export const useFetch = <TData, TError = any>(
     url,
   ]);
 
-  const doFetch = useCallback((options?: UseFetchOption) => {
-    setOptions(() => ({
-      responseType: "json",
-      ...options,
-    }));
-    setFetch(() => true);
-  }, []);
+  const doFetch = useCallback(
+    (options?: UseFetchOption) => {
+      request();
+
+      setOptions(() => ({
+        responseType: "json",
+        ...options,
+      }));
+
+      setFetch(() => true);
+    },
+    [request]
+  );
 
   return [state, doFetch, headers];
 };
