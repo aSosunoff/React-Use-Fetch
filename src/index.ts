@@ -4,7 +4,6 @@ import {
   useEffect,
   useMemo,
   useReducer,
-  useRef,
   useState,
 } from "react";
 
@@ -23,10 +22,6 @@ export interface State<T, TError = any> {
   error?: TError;
 }
 
-interface Cache<T> {
-  [url: string]: T;
-}
-
 interface UseFetchOption extends RequestInit {
   responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
 }
@@ -39,8 +34,6 @@ export const useFetch = <TData, TError = any>(
   ReturnType<typeof useHeaders>["headers"]
 ] => {
   const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
-
-  const cache = useRef<Cache<TData>>({});
 
   const [isFetch, setFetch] = useState(false);
 
@@ -127,7 +120,6 @@ export const useFetch = <TData, TError = any>(
       }
 
       if (!cancelRequest) {
-        cache.current[url] = data;
         setFetch(() => false);
         success(data);
       }
