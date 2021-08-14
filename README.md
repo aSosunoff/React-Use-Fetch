@@ -16,7 +16,7 @@
 git clone https://github.com/aSosunoff/React-Use-Fetch.git
 cd React-Use-Fetch
 npm i
-npm run start
+npm run demo
 ```
 
 ### Test project:

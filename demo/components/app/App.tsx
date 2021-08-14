@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useFetch } from "../../../src";
 /* import { useFetch } from "../../../dist"; */
 import ErrorImg from "../error-img";
@@ -16,13 +16,17 @@ const App: React.FC = () => {
     "https://jsonplaceholder.typicode.com/posts"
   );
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  const [isClear, setClear] = useState(false);
+  const clearHandler = useCallback(() => setClear(true), []);
+
   const doFetchWrapper = useCallback(() => {
     setClear(false);
     doFetch();
   }, [doFetch]);
-
-  const [isClear, setClear] = useState(false);
-  const clearHandler = useCallback(() => setClear(true), []);
 
   const list = useMemo(() => (isClear ? [] : data), [data, isClear]);
 
@@ -53,28 +57,32 @@ const App: React.FC = () => {
 
       <div className="row mt-3">
         <div className="col">
-          <table className="table table-dark table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">User ID</th>
-                <th scope="col">Post ID</th>
-                <th scope="col">Title</th>
-                <th scope="col">Body</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list?.map(({ userId, id, title, body }) => (
-                <tr key={id}>
-                  <th scope="row">{userId}</th>
-                  <td>{id}</td>
-                  <td>{title}</td>
-                  <td>{body}</td>
+          {status === "success" && (
+            <table className="table table-dark table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">User ID</th>
+                  <th scope="col">Post ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Body</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          {status === "request" ? <Spinner /> : null}
-          {status === "failure" ? <ErrorImg /> : null}
+              </thead>
+              <tbody>
+                {list?.map(({ userId, id, title, body }) => (
+                  <tr key={id}>
+                    <th scope="row">{userId}</th>
+                    <td>{id}</td>
+                    <td>{title}</td>
+                    <td>{body}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {status === "request" && <Spinner />}
+
+          {status === "failure" && <ErrorImg />}
         </div>
       </div>
     </div>

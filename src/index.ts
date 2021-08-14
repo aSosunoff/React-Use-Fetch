@@ -32,8 +32,7 @@ interface UseFetchOption extends RequestInit {
 }
 
 export const useFetch = <TData, TError = any>(
-  url: string,
-  isCache = false
+  url: string
 ): [
   State<TData, TError>,
   (options?: UseFetchOption) => void,
@@ -63,7 +62,7 @@ export const useFetch = <TData, TError = any>(
     ): State<TData, TError> => {
       switch (action.type) {
         case "request":
-          return { ...initialState, status: "request" };
+          return { ...initialState, status: "request", data: state.data };
         case "success":
           return { ...initialState, status: "success", data: action.payload };
         case "failure":
@@ -94,12 +93,6 @@ export const useFetch = <TData, TError = any>(
     let cancelRequest = false;
 
     const doFetch = async () => {
-      if (isCache && cache.current[url]) {
-        setFetch(() => false);
-        !cancelRequest && success(cache.current[url]);
-        return;
-      }
-
       const { responseType, ...optionsFetch } = options;
 
       const response = await fetch(url.toString(), optionsFetch);
@@ -154,7 +147,6 @@ export const useFetch = <TData, TError = any>(
   }, [
     clearHeadersHandler,
     failure,
-    isCache,
     isFetch,
     options,
     request,

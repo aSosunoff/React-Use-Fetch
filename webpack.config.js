@@ -16,7 +16,7 @@ const isDeploy = process.env.GP_DEPLOY === "true";
 
 const publicUrl = process.env.PUBLIC_URL;
 
-const pathDemo = process.env.DEMO_PATH || "demo";
+const pathDemo = process.env.DEMO_PATH;
 
 const babelLoader = {
   loader: "babel-loader",
