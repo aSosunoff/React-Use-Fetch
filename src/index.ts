@@ -1,76 +1,22 @@
-import { useHeaders } from "./useHeaderas";
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
-
-type Action<K extends string, V = void> = V extends void
-  ? { type: K }
-  : { type: K } & V;
-
-type ActionFetch<T, E> =
-  | Action<"request">
-  | Action<"success", { payload: T }>
-  | Action<"failure", { payload: E }>;
-
-export interface State<TData, TError = any> {
-  status: "init" | "request" | "failure" | "success";
-  data?: TData;
-  error?: TError;
-}
+import { useCallback, useEffect, useState } from "react";
+import { useTrigger } from "./use-trigger";
+import { tuple } from "./tuple";
+import { useFetchReducer } from "./use-fetch-reducer";
+import { useHeaders } from "./use-headers";
 
 interface UseFetchOption extends RequestInit {
   responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
 }
 
-export const useFetch = <TData, TError = any>(
-  url: string
-): [
-  State<TData, TError>,
-  (options?: UseFetchOption) => void,
-  ReturnType<typeof useHeaders>["headers"]
-] => {
+export const useFetch = <TData, TError = any>(url: string) => {
   const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
-
-  const [isFetch, setFetch] = useState(false);
 
   const { headers, setHeadersHandler, clearHeadersHandler } = useHeaders();
 
-  const initialState = useMemo<State<TData, TError>>(
-    () => ({
-      status: "init",
-      error: undefined,
-      data: undefined,
-    }),
-    []
-  );
+  const { state, request, success, failure } = useFetchReducer<TData, TError>();
 
-  const fetchReducer = useCallback(
-    (
-      state: State<TData, TError>,
-      action: ActionFetch<TData, TError>
-    ): State<TData, TError> => {
-      switch (action.type) {
-        case "request":
-          return { ...initialState, status: "request", data: state.data };
-        case "success":
-          return { ...initialState, status: "success", data: action.payload };
-        case "failure":
-          return { ...initialState, status: "failure", error: action.payload };
-        default:
-          return state;
-      }
-    },
-    [initialState]
-  );
-
-  const [state, dispatch] = useReducer(fetchReducer, initialState);
-  const request = useCallback(() => dispatch({ type: "request" }), []);
-  const success = useCallback(
-    (payload) => dispatch({ type: "success", payload }),
-    []
-  );
-  const failure = useCallback(
-    (payload) => dispatch({ type: "failure", payload }),
-    []
-  );
+  const [isFetch, { onHandler: fetchStart, offHandler: fetchFinish }] =
+    useTrigger();
 
   useEffect(() => {
     if (!isFetch) {
@@ -114,14 +60,14 @@ export const useFetch = <TData, TError = any>(
       }
 
       if (!cancelRequest) {
-        setFetch(() => false);
+        fetchFinish();
         success(data);
       }
     };
 
     doFetch().catch((error) => {
       if (!cancelRequest) {
-        setFetch(() => false);
+        fetchFinish();
         clearHeadersHandler();
         failure(error);
       }
@@ -138,6 +84,7 @@ export const useFetch = <TData, TError = any>(
     setHeadersHandler,
     success,
     url,
+    fetchFinish,
   ]);
 
   const doFetch = useCallback(
@@ -149,10 +96,10 @@ export const useFetch = <TData, TError = any>(
         ...options,
       }));
 
-      setFetch(() => true);
+      fetchStart();
     },
-    [request]
+    [request, fetchStart]
   );
 
-  return [state, doFetch, headers];
+  return tuple(state, doFetch, headers);
 };
