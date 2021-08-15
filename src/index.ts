@@ -1,11 +1,5 @@
 import { useHeaders } from "./useHeaderas";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 type Action<K extends string, V = void> = V extends void
   ? { type: K }
@@ -79,7 +73,7 @@ export const useFetch = <TData, TError = any>(
   );
 
   useEffect(() => {
-    if (!url || !isFetch) {
+    if (!isFetch) {
       return;
     }
 
@@ -141,7 +135,6 @@ export const useFetch = <TData, TError = any>(
     failure,
     isFetch,
     options,
-    request,
     setHeadersHandler,
     success,
     url,
