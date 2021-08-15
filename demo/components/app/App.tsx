@@ -57,16 +57,16 @@ const App: React.FC = () => {
 
       <div className="row mt-3">
         <div className="col">
-          {status === "success" && (
-            <table className="table table-dark table-striped table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">User ID</th>
-                  <th scope="col">Post ID</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Body</th>
-                </tr>
-              </thead>
+          <table className="table table-dark table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">Post ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Body</th>
+              </tr>
+            </thead>
+            {status === "success" && (
               <tbody>
                 {list?.map(({ userId, id, title, body }) => (
                   <tr key={id}>
@@ -77,8 +77,8 @@ const App: React.FC = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          )}
+            )}
+          </table>
 
           {status === "request" && <Spinner />}
 
