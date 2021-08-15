@@ -5,14 +5,14 @@ type Action<K extends string, V = void> = V extends void
   ? { type: K }
   : { type: K } & V;
 
-type ActionFetch<T> =
+type ActionFetch<T, E> =
   | Action<"request">
   | Action<"success", { payload: T }>
-  | Action<"failure", { payload: any }>;
+  | Action<"failure", { payload: E }>;
 
-export interface State<T, TError = any> {
+export interface State<TData, TError = any> {
   status: "init" | "request" | "failure" | "success";
-  data?: T;
+  data?: TData;
   error?: TError;
 }
 
@@ -45,7 +45,7 @@ export const useFetch = <TData, TError = any>(
   const fetchReducer = useCallback(
     (
       state: State<TData, TError>,
-      action: ActionFetch<TData>
+      action: ActionFetch<TData, TError>
     ): State<TData, TError> => {
       switch (action.type) {
         case "request":
