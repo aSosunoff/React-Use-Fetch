@@ -59,10 +59,9 @@ var App = function App() {
       data = _b.data,
       doFetch = _a[1];
 
-  var doFetchWrapper = react_1.useCallback(function () {
-    setClear(false);
-    doFetch();
-  }, [doFetch]);
+  react_1.useEffect(function () {
+    console.log(data);
+  }, [data]);
 
   var _c = react_1.useState(false),
       isClear = _c[0],
@@ -71,6 +70,10 @@ var App = function App() {
   var clearHandler = react_1.useCallback(function () {
     return setClear(true);
   }, []);
+  var doFetchWrapper = react_1.useCallback(function () {
+    setClear(false);
+    doFetch();
+  }, [doFetch]);
   var list = react_1.useMemo(function () {
     return isClear ? [] : data;
   }, [data, isClear]);
@@ -134,7 +137,7 @@ var App = function App() {
                 children: "Body"
               }), void 0)]
             }, void 0)
-          }, void 0), jsx_runtime_1.jsx("tbody", {
+          }, void 0), status === "success" && jsx_runtime_1.jsx("tbody", {
             children: list === null || list === void 0 ? void 0 : list.map(function (_a) {
               var userId = _a.userId,
                   id = _a.id,
@@ -155,7 +158,7 @@ var App = function App() {
               }, id);
             })
           }, void 0)]
-        }), void 0), status === "request" ? jsx_runtime_1.jsx(spinner_1["default"], {}, void 0) : null, status === "failure" ? jsx_runtime_1.jsx(error_img_1["default"], {}, void 0) : null]
+        }), void 0), status === "request" && jsx_runtime_1.jsx(spinner_1["default"], {}, void 0), status === "failure" && jsx_runtime_1.jsx(error_img_1["default"], {}, void 0)]
       }), void 0)
     }), void 0)]
   }), void 0);
@@ -566,84 +569,40 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.useFetch = void 0;
 
-var useHeaderas_1 = __webpack_require__(62);
-
 var react_1 = __webpack_require__(378);
 
-var useFetch = function useFetch(url, isCache) {
-  if (isCache === void 0) {
-    isCache = false;
-  }
+var use_trigger_1 = __webpack_require__(142);
 
+var tuple_1 = __webpack_require__(877);
+
+var use_fetch_reducer_1 = __webpack_require__(610);
+
+var use_headers_1 = __webpack_require__(200);
+
+var useFetch = function useFetch(url) {
   var _a = react_1.useState({}),
       options = _a[0],
       setOptions = _a[1];
 
-  var cache = react_1.useRef({});
+  var _b = use_headers_1.useHeaders(),
+      headers = _b.headers,
+      setHeadersHandler = _b.setHeadersHandler,
+      clearHeadersHandler = _b.clearHeadersHandler;
 
-  var _b = react_1.useState(false),
-      isFetch = _b[0],
-      setFetch = _b[1];
+  var _c = use_fetch_reducer_1.useFetchReducer(),
+      state = _c.state,
+      request = _c.request,
+      success = _c.success,
+      failure = _c.failure;
 
-  var _c = useHeaderas_1.useHeaders(),
-      headers = _c.headers,
-      setHeadersHandler = _c.setHeadersHandler,
-      clearHeadersHandler = _c.clearHeadersHandler;
+  var _d = use_trigger_1.useTrigger(),
+      isFetch = _d[0],
+      _e = _d[1],
+      fetchStart = _e.onHandler,
+      fetchFinish = _e.offHandler;
 
-  var initialState = react_1.useMemo(function () {
-    return {
-      status: "init",
-      error: undefined,
-      data: undefined
-    };
-  }, []);
-  var fetchReducer = react_1.useCallback(function (state, action) {
-    switch (action.type) {
-      case "request":
-        return __assign(__assign({}, initialState), {
-          status: "request"
-        });
-
-      case "success":
-        return __assign(__assign({}, initialState), {
-          status: "success",
-          data: action.payload
-        });
-
-      case "failure":
-        return __assign(__assign({}, initialState), {
-          status: "failure",
-          error: action.payload
-        });
-
-      default:
-        return state;
-    }
-  }, [initialState]);
-
-  var _d = react_1.useReducer(fetchReducer, initialState),
-      state = _d[0],
-      dispatch = _d[1];
-
-  var request = react_1.useCallback(function () {
-    return dispatch({
-      type: "request"
-    });
-  }, []);
-  var success = react_1.useCallback(function (payload) {
-    return dispatch({
-      type: "success",
-      payload: payload
-    });
-  }, []);
-  var failure = react_1.useCallback(function (payload) {
-    return dispatch({
-      type: "failure",
-      payload: payload
-    });
-  }, []);
   react_1.useEffect(function () {
-    if (!url || !isFetch) {
+    if (!isFetch) {
       return;
     }
 
@@ -656,16 +615,6 @@ var useFetch = function useFetch(url, isCache) {
         return __generator(this, function (_b) {
           switch (_b.label) {
             case 0:
-              if (isCache && cache.current[url]) {
-                setFetch(function () {
-                  return false;
-                });
-                !cancelRequest && success(cache.current[url]);
-                return [2
-                /*return*/
-                ];
-              }
-
               responseType = options.responseType, optionsFetch = __rest(options, ["responseType"]);
               return [4
               /*yield*/
@@ -780,10 +729,7 @@ var useFetch = function useFetch(url, isCache) {
 
             case 15:
               if (!cancelRequest) {
-                cache.current[url] = data;
-                setFetch(function () {
-                  return false;
-                });
+                fetchFinish();
                 success(data);
               }
 
@@ -797,9 +743,7 @@ var useFetch = function useFetch(url, isCache) {
 
     doFetch()["catch"](function (error) {
       if (!cancelRequest) {
-        setFetch(function () {
-          return false;
-        });
+        fetchFinish();
         clearHeadersHandler();
         failure(error);
       }
@@ -807,7 +751,7 @@ var useFetch = function useFetch(url, isCache) {
     return function () {
       cancelRequest = true;
     };
-  }, [clearHeadersHandler, failure, isCache, isFetch, options, request, setHeadersHandler, success, url]);
+  }, [clearHeadersHandler, failure, isFetch, options, setHeadersHandler, success, url, fetchFinish]);
   var doFetch = react_1.useCallback(function (options) {
     request();
     setOptions(function () {
@@ -815,18 +759,134 @@ var useFetch = function useFetch(url, isCache) {
         responseType: "json"
       }, options);
     });
-    setFetch(function () {
-      return true;
-    });
-  }, [request]);
-  return [state, doFetch, headers];
+    fetchStart();
+  }, [request, fetchStart]);
+  return tuple_1.tuple(state, doFetch, headers);
 };
 
 exports.useFetch = useFetch;
 
 /***/ }),
 
-/***/ 62:
+/***/ 877:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.tuple = void 0;
+
+var tuple = function tuple() {
+  var args = [];
+
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+
+  return args;
+};
+
+exports.tuple = tuple;
+
+/***/ }),
+
+/***/ 610:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useFetchReducer = void 0;
+
+var react_1 = __webpack_require__(378);
+
+var useFetchReducer = function useFetchReducer() {
+  var initialState = react_1.useMemo(function () {
+    return {
+      status: "init",
+      error: undefined,
+      data: undefined
+    };
+  }, []);
+  var fetchReducer = react_1.useCallback(function (state, action) {
+    switch (action.type) {
+      case "request":
+        return __assign(__assign({}, initialState), {
+          status: "request",
+          data: state.data
+        });
+
+      case "success":
+        return __assign(__assign({}, initialState), {
+          status: "success",
+          data: action.payload
+        });
+
+      case "failure":
+        return __assign(__assign({}, initialState), {
+          status: "failure",
+          error: action.payload
+        });
+
+      default:
+        return state;
+    }
+  }, [initialState]);
+
+  var _a = react_1.useReducer(fetchReducer, initialState),
+      state = _a[0],
+      dispatch = _a[1];
+
+  var request = react_1.useCallback(function () {
+    return dispatch({
+      type: "request"
+    });
+  }, []);
+  var success = react_1.useCallback(function (payload) {
+    return dispatch({
+      type: "success",
+      payload: payload
+    });
+  }, []);
+  var failure = react_1.useCallback(function (payload) {
+    return dispatch({
+      type: "failure",
+      payload: payload
+    });
+  }, []);
+  return {
+    state: state,
+    request: request,
+    success: success,
+    failure: failure
+  };
+};
+
+exports.useFetchReducer = useFetchReducer;
+
+/***/ }),
+
+/***/ 200:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -884,6 +944,55 @@ var useHeaders = function useHeaders() {
 };
 
 exports.useHeaders = useHeaders;
+
+/***/ }),
+
+/***/ 142:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useTrigger = void 0;
+
+var react_1 = __webpack_require__(378);
+
+var tuple_1 = __webpack_require__(877);
+
+var useTrigger = function useTrigger(initialState) {
+  if (initialState === void 0) {
+    initialState = false;
+  }
+
+  var _a = react_1.useState(initialState),
+      state = _a[0],
+      setState = _a[1];
+
+  var onHandler = react_1.useCallback(function () {
+    return setState(function () {
+      return true;
+    });
+  }, []);
+  var offHandler = react_1.useCallback(function () {
+    return setState(function () {
+      return false;
+    });
+  }, []);
+  var togglerHandler = react_1.useCallback(function () {
+    return setState(function (prev) {
+      return !prev;
+    });
+  }, []);
+  return tuple_1.tuple(state, {
+    onHandler: onHandler,
+    offHandler: offHandler,
+    togglerHandler: togglerHandler
+  });
+};
+
+exports.useTrigger = useTrigger;
 
 /***/ }),
 
