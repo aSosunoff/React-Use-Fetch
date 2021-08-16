@@ -1,6 +1,6 @@
 {
   "name": "@asosunoff/react_use_fetch",
-  "version": "0.4.4",
+  "version": "0.5.4",
   "description": "React UseFetch",
   "homepage": "https://asosunoff.github.io/React-Use-Fetch/",
   "author": {
@@ -73,6 +73,7 @@
     "build": "cross-env CONFIG=production webpack --mode production",
     "demo": "cross-env DEMO_PATH=demo webpack serve --mode development --open",
     "demo2": "cross-env DEMO_PATH=demo_2 webpack serve --mode development --open",
+    "demo3": "cross-env DEMO_PATH=demo_3 webpack serve --mode development --open",
     "predeploy": "cross-env GP_DEPLOY=true CONFIG=production webpack --mode production",
     "deploy": "gh-pages -d build",
     "lint": "eslint src demo",
