@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useFetch } from "../../../src/fetch_1";
+import { useFetch } from "../../../src";
 /* import { useFetch } from "../../../dist"; */
 import ErrorImg from "../error-img";
 import Spinner from "../spinner";

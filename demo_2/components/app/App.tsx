@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useFetch } from "../../../src";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 /* import { useFetch } from "../../../dist"; */
