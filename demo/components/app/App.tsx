@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useFetch } from "../../../src";
+import { useFetchByUrl } from "../../../src";
 /* import { useFetch } from "../../../dist"; */
 import ErrorImg from "../error-img";
 import Spinner from "../spinner";
@@ -12,7 +12,7 @@ interface IPost {
 }
 
 const App: React.FC = () => {
-  const [{ status, data }, doFetch] = useFetch<IPost[]>(
+  const [{ status, data }, doFetch] = useFetchByUrl<IPost[]>(
     "https://jsonplaceholder.typicode.com/posts"
   );
 

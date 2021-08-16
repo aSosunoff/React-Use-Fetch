@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
-import { useTrigger } from "./use-trigger";
-import { tuple } from "./tuple";
-import { useFetchReducer } from "./use-fetch-reducer";
-import { useHeaders } from "./use-headers";
+import { useCallback, useEffect } from "react";
+import { useTrigger } from "../hooks/use-trigger";
+import { tuple } from "../utils/tuple";
+import { useFetchReducer } from "../hooks/use-fetch-reducer";
+import { useParams } from "./use-params";
 
-interface UseFetchOption extends RequestInit {
-  responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
-}
-
-export const useFetchCustom = <TData, TError = any>(url: string) => {
-  const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
-
-  const { headers, setHeadersHandler, clearHeadersHandler } = useHeaders();
-
+export const useFetchByCallback = <
+  TData,
+  TError = any,
+  TParams extends any[] = any[]
+>(
+  callback: (...params: TParams) => Promise<TData>
+) => {
   const { state, request, success, failure } = useFetchReducer<TData, TError>();
 
   const [isFetch, { onHandler: fetchStart, offHandler: fetchFinish }] =
     useTrigger();
+
+  const { params, setParamsHandler, clearParamsHandler } = useParams<TParams>();
 
   useEffect(() => {
     if (!isFetch) {
@@ -25,81 +25,47 @@ export const useFetchCustom = <TData, TError = any>(url: string) => {
 
     let cancelRequest = false;
 
-    const doFetch = async () => {
-      const { responseType, ...optionsFetch } = options;
+    const doFetch = async (...params: TParams) => {
+      try {
+        const data = await callback(...params);
 
-      const response = await fetch(url.toString(), optionsFetch);
+        if (cancelRequest) return;
 
-      setHeadersHandler(response.headers);
-
-      if (!response.ok) {
-        const body = await response.json();
-        throw body;
-      }
-
-      let data = null;
-
-      switch (responseType) {
-        case "text":
-          data = await response.text();
-          break;
-        case "json":
-          data = await response.json();
-          break;
-        case "formData":
-          data = await response.formData();
-          break;
-        case "blob":
-          data = await response.blob();
-          break;
-        case "arrayBuffer":
-          data = await response.arrayBuffer();
-          break;
-        default:
-          throw new Error("Not found type of response");
-      }
-
-      if (!cancelRequest) {
         fetchFinish();
         success(data);
+        clearParamsHandler();
+      } catch (error) {
+        if (cancelRequest) return;
+
+        fetchFinish();
+        failure(error);
+        clearParamsHandler();
       }
     };
 
-    doFetch().catch((error) => {
-      if (!cancelRequest) {
-        fetchFinish();
-        clearHeadersHandler();
-        failure(error);
-      }
-    });
+    doFetch(...params);
 
     return () => {
       cancelRequest = true;
     };
   }, [
-    clearHeadersHandler,
+    callback,
     failure,
-    isFetch,
-    options,
-    setHeadersHandler,
-    success,
-    url,
     fetchFinish,
+    isFetch,
+    success,
+    params,
+    clearParamsHandler,
   ]);
 
   const doFetch = useCallback(
-    (options?: UseFetchOption) => {
+    (...params: TParams) => {
+      setParamsHandler(params);
       request();
-
-      setOptions(() => ({
-        responseType: "json",
-        ...options,
-      }));
-
       fetchStart();
     },
-    [request, fetchStart]
+    [request, fetchStart, setParamsHandler]
   );
 
-  return tuple(state, doFetch, headers);
+  return tuple(state, doFetch);
 };

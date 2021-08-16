@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useFetch } from "../../../src";
+import { useFetchByCallback } from "../../../src";
 /* import { useFetch } from "../../../dist"; */
 import ErrorImg from "../error-img";
 import Spinner from "../spinner";
@@ -12,13 +12,30 @@ interface IPost {
 }
 
 const App: React.FC = () => {
-  const [{ status, data }, doFetch] = useFetch<IPost[]>(
-    "https://jsonplaceholder.typicode.com/posts"
+  const [{ status, data, error }, doFetch] = useFetchByCallback<IPost[]>(
+    async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts"
+      );
+
+      if (!response.ok) {
+        const body = await response.json();
+        throw body;
+      }
+
+      const data = await response.json();
+
+      return data;
+    }
   );
 
   useEffect(() => {
     console.log(data);
   }, [data]);
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   const [isClear, setClear] = useState(false);
   const clearHandler = useCallback(() => setClear(true), []);
@@ -56,7 +73,13 @@ const App: React.FC = () => {
       </div>
 
       <div className="row mt-3">
-        <div className="col">
+        <div
+          className="col"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <table className="table table-dark table-striped table-hover">
             <thead>
               <tr>

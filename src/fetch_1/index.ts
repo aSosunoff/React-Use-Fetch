@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { useTrigger } from "./use-trigger";
-import { tuple } from "./tuple";
-import { useFetchReducer } from "./use-fetch-reducer";
+import { useTrigger } from "../hooks/use-trigger";
+import { tuple } from "../utils/tuple";
+import { useFetchReducer } from "../hooks/use-fetch-reducer";
 import { useHeaders } from "./use-headers";
 
 interface UseFetchOption extends RequestInit {
   responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
 }
 
-export const useFetch = <TData, TError = any>(url: string) => {
+export const useFetchByUrl = <TData, TError = any>(url: string) => {
   const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
 
   const { headers, setHeadersHandler, clearHeadersHandler } = useHeaders();
