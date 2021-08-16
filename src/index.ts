@@ -1,2 +1,2 @@
-export { useFetchByUrl } from "./fetch_1";
-export { useFetchByCallback } from "./fetch_2";
+export { useFetchByUrl } from "./use-fetch-by-url";
+export { useFetchByCallback } from "./use-fetch-by-callback";
