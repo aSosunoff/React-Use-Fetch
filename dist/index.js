@@ -296,7 +296,7 @@ var __generator = this && this.__generator || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useFetchByCallback = void 0;
+exports.useCallbackAsync = void 0;
 
 var react_1 = __webpack_require__(297);
 
@@ -308,7 +308,7 @@ var use_fetch_reducer_1 = __webpack_require__(303);
 
 var use_params_1 = __webpack_require__(312);
 
-var useFetchByCallback = function useFetchByCallback(callback) {
+var useCallbackAsync = function useCallbackAsync(callback) {
   var _a = use_fetch_reducer_1.useFetchReducer(),
       state = _a.state,
       request = _a.request,
@@ -397,7 +397,7 @@ var useFetchByCallback = function useFetchByCallback(callback) {
   return tuple_1.tuple(state, doFetch);
 };
 
-exports.useFetchByCallback = useFetchByCallback;
+exports.useCallbackAsync = useCallbackAsync;
 
 /***/ }),
 
@@ -948,7 +948,7 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useFetchByCallback = exports.useFetchByUrl = void 0;
+exports.useCallbackAsync = exports.useFetchByUrl = void 0;
 
 var use_fetch_by_url_1 = __webpack_require__(36);
 
@@ -961,10 +961,10 @@ Object.defineProperty(exports, "useFetchByUrl", ({
 
 var use_fetch_by_callback_1 = __webpack_require__(553);
 
-Object.defineProperty(exports, "useFetchByCallback", ({
+Object.defineProperty(exports, "useCallbackAsync", ({
   enumerable: true,
   get: function get() {
-    return use_fetch_by_callback_1.useFetchByCallback;
+    return use_fetch_by_callback_1.useCallbackAsync;
   }
 }));
 })();

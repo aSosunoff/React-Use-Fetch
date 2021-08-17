@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useFetchByCallback } from "../../../src";
+import { useCallbackAsync } from "../../../src";
 /* import { useFetchByCallback } from "../../../dist"; */
 import ErrorImg from "../error-img";
 import Spinner from "../spinner";
@@ -12,7 +12,7 @@ interface IPost {
 }
 
 const App: React.FC = () => {
-  const [{ status, data, error }, doFetch] = useFetchByCallback<IPost[]>(
+  const [{ status, data, error }, doFetch] = useCallbackAsync<IPost[]>(
     async () => {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/posts"

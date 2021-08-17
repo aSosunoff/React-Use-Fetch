@@ -4,7 +4,7 @@ import { tuple } from "../utils/tuple";
 import { useFetchReducer } from "../hooks/use-fetch-reducer";
 import { useParams } from "./use-params";
 
-export const useFetchByCallback = <
+export const useCallbackAsync = <
   TData,
   TError = any,
   TParams extends any[] = any[]
