@@ -549,18 +549,18 @@ Object.defineProperty(exports, "useFetchByUrl", ({
   }
 }));
 
-var use_fetch_by_callback_1 = __webpack_require__(567);
+var use_callback_async_1 = __webpack_require__(392);
 
 Object.defineProperty(exports, "useCallbackAsync", ({
   enumerable: true,
   get: function get() {
-    return use_fetch_by_callback_1.useCallbackAsync;
+    return use_callback_async_1.useCallbackAsync;
   }
 }));
 
 /***/ }),
 
-/***/ 567:
+/***/ 392:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -721,7 +721,7 @@ var tuple_1 = __webpack_require__(308);
 
 var use_fetch_reducer_1 = __webpack_require__(919);
 
-var use_params_1 = __webpack_require__(731);
+var use_params_1 = __webpack_require__(843);
 
 var useCallbackAsync = function useCallbackAsync(callback) {
   var _a = use_fetch_reducer_1.useFetchReducer(),
@@ -816,7 +816,7 @@ exports.useCallbackAsync = useCallbackAsync;
 
 /***/ }),
 
-/***/ 731:
+/***/ 843:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
