@@ -145,7 +145,7 @@ exports.useTrigger = useTrigger;
 
 /***/ }),
 
-/***/ 553:
+/***/ 142:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -306,7 +306,7 @@ var tuple_1 = __webpack_require__(619);
 
 var use_fetch_reducer_1 = __webpack_require__(303);
 
-var use_params_1 = __webpack_require__(312);
+var use_params_1 = __webpack_require__(375);
 
 var useCallbackAsync = function useCallbackAsync(callback) {
   var _a = use_fetch_reducer_1.useFetchReducer(),
@@ -401,7 +401,7 @@ exports.useCallbackAsync = useCallbackAsync;
 
 /***/ }),
 
-/***/ 312:
+/***/ 375:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -959,12 +959,12 @@ Object.defineProperty(exports, "useFetchByUrl", ({
   }
 }));
 
-var use_fetch_by_callback_1 = __webpack_require__(553);
+var use_callback_async_1 = __webpack_require__(142);
 
 Object.defineProperty(exports, "useCallbackAsync", ({
   enumerable: true,
   get: function get() {
-    return use_fetch_by_callback_1.useCallbackAsync;
+    return use_callback_async_1.useCallbackAsync;
   }
 }));
 })();
