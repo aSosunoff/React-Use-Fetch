@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-/* import { useFetchByCallback } from "../../../src"; */
-import { useFetchByCallback } from "../../../dist";
+import { useFetchByCallback } from "../../../src";
+/* import { useFetchByCallback } from "../../../dist"; */
 import ErrorImg from "../error-img";
 import Spinner from "../spinner";
 
@@ -30,11 +30,11 @@ const App: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log(data);
+    console.log("data", data);
   }, [data]);
 
   useEffect(() => {
-    console.log(error);
+    console.log("error", error);
   }, [error]);
 
   const [isClear, setClear] = useState(false);

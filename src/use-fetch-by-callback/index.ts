@@ -13,19 +13,17 @@ export const useFetchByCallback = <
 ) => {
   const { state, request, success, failure } = useFetchReducer<TData, TError>();
 
-  const [isFetch, { onHandler: fetchStart, offHandler: fetchFinish }] =
+  const [isStartFetch, { onHandler: fetchStart, offHandler: fetchFinish }] =
     useTrigger();
 
   const { params, setParamsHandler, clearParamsHandler } = useParams<TParams>();
 
   useEffect(() => {
-    if (!isFetch) {
-      return;
-    }
+    if (!isStartFetch) return;
 
     let cancelRequest = false;
 
-    const doFetch = async (...params: TParams) => {
+    (async (...params: TParams) => {
       try {
         const data = await callback(...params);
 
@@ -41,9 +39,7 @@ export const useFetchByCallback = <
         failure(error);
         clearParamsHandler();
       }
-    };
-
-    doFetch(...params);
+    })(...params);
 
     return () => {
       cancelRequest = true;
@@ -52,7 +48,7 @@ export const useFetchByCallback = <
     callback,
     failure,
     fetchFinish,
-    isFetch,
+    isStartFetch,
     success,
     params,
     clearParamsHandler,
