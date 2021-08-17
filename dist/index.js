@@ -316,7 +316,7 @@ var useFetchByCallback = function useFetchByCallback(callback) {
       failure = _a.failure;
 
   var _b = use_trigger_1.useTrigger(),
-      isFetch = _b[0],
+      isStartFetch = _b[0],
       _c = _b[1],
       fetchStart = _c.onHandler,
       fetchFinish = _c.offHandler;
@@ -327,13 +327,9 @@ var useFetchByCallback = function useFetchByCallback(callback) {
       clearParamsHandler = _d.clearParamsHandler;
 
   react_1.useEffect(function () {
-    if (!isFetch) {
-      return;
-    }
-
+    if (!isStartFetch) return;
     var cancelRequest = false;
-
-    var doFetch = function doFetch() {
+    (function () {
       var params = [];
 
       for (var _i = 0; _i < arguments.length; _i++) {
@@ -382,13 +378,11 @@ var useFetchByCallback = function useFetchByCallback(callback) {
           }
         });
       });
-    };
-
-    doFetch.apply(void 0, params);
+    }).apply(void 0, params);
     return function () {
       cancelRequest = true;
     };
-  }, [callback, failure, fetchFinish, isFetch, success, params, clearParamsHandler]);
+  }, [callback, failure, fetchFinish, isStartFetch, success, params, clearParamsHandler]);
   var doFetch = react_1.useCallback(function () {
     var params = [];
 
