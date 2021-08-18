@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useFetchByUrl } from "../../../src";
+import { useFetch } from "../../../src";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 /* import { useFetch } from "../../../dist"; */
 /* import ErrorImg from "../error-img"; */
@@ -53,7 +53,7 @@ const App: React.FC = () => {
 
   const [token, setToken] = useLocalStorage<string>("token");
 
-  const [{ status, data, error }, doFetch] = useFetchByUrl<IUser, IUserError>(
+  const [{ status, data, error }, doFetch] = useFetch<IUser, IUserError>(
     "https://conduit.productionready.io/api/users/login"
   );
 
@@ -84,7 +84,7 @@ const App: React.FC = () => {
   /* ARTICLES */
 
   const [{ status: statusArticles, data: dataArticles }, doFetchArticles] =
-    useFetchByUrl<IArticles>(
+    useFetch<IArticles>(
       "https://conduit.productionready.io/api/articles?limit=10&offset=0"
     );
 

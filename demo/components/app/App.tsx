@@ -12,13 +12,17 @@ interface IPost {
 }
 
 const App: React.FC = () => {
-  const [{ status, data }, doFetch] = useFetch<IPost[]>(
+  const [{ status, data }, doFetch, headers] = useFetch<IPost[]>(
     "https://jsonplaceholder.typicode.com/posts"
   );
 
   useEffect(() => {
     console.log(data);
   }, [data]);
+
+  useEffect(() => {
+    console.log(headers);
+  }, [headers]);
 
   const [isClear, setClear] = useState(false);
   const clearHandler = useCallback(() => setClear(true), []);
