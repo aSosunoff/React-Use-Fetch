@@ -530,6 +530,62 @@ exports.useTrigger = useTrigger;
 
 /***/ }),
 
+/***/ 340:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useWhyDidYouUpdate = void 0;
+
+var react_1 = __webpack_require__(378);
+
+var useWhyDidYouUpdate = function useWhyDidYouUpdate(props, callback) {
+  var previousProps = react_1.useRef({});
+  react_1.useEffect(function () {
+    if (previousProps.current) {
+      var allKeys = Object.keys(__assign(__assign({}, previousProps.current), props));
+      var changeObj_1 = {};
+      allKeys.forEach(function (key) {
+        if (previousProps.current[key] !== props[key]) {
+          changeObj_1[key] = {
+            from: previousProps.current[key],
+            to: props[key]
+          };
+        }
+      });
+
+      if (Object.keys(changeObj_1).length) {
+        callback(changeObj_1);
+      }
+    }
+
+    previousProps.current = props;
+  }, [props, callback]);
+};
+
+exports.useWhyDidYouUpdate = useWhyDidYouUpdate;
+
+/***/ }),
+
 /***/ 819:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -538,7 +594,7 @@ exports.useTrigger = useTrigger;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useCallbackAsync = exports.useFetchByUrl = void 0;
+exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetchByUrl = void 0;
 
 var use_fetch_by_url_1 = __webpack_require__(667);
 
@@ -555,6 +611,42 @@ Object.defineProperty(exports, "useCallbackAsync", ({
   enumerable: true,
   get: function get() {
     return use_callback_async_1.useCallbackAsync;
+  }
+}));
+
+var use_fetch_reducer_1 = __webpack_require__(919);
+
+Object.defineProperty(exports, "useFetchReducer", ({
+  enumerable: true,
+  get: function get() {
+    return use_fetch_reducer_1.useFetchReducer;
+  }
+}));
+
+var use_trigger_1 = __webpack_require__(363);
+
+Object.defineProperty(exports, "useTrigger", ({
+  enumerable: true,
+  get: function get() {
+    return use_trigger_1.useTrigger;
+  }
+}));
+
+var use_why_did_you_update_1 = __webpack_require__(340);
+
+Object.defineProperty(exports, "useWhyDidYouUpdate", ({
+  enumerable: true,
+  get: function get() {
+    return use_why_did_you_update_1.useWhyDidYouUpdate;
+  }
+}));
+
+var use_parse_jwt_1 = __webpack_require__(969);
+
+Object.defineProperty(exports, "useParseJWT", ({
+  enumerable: true,
+  get: function get() {
+    return use_parse_jwt_1.useParseJWT;
   }
 }));
 
@@ -1293,6 +1385,60 @@ var useHeaders = function useHeaders() {
 };
 
 exports.useHeaders = useHeaders;
+
+/***/ }),
+
+/***/ 969:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useParseJWT = void 0;
+
+var react_1 = __webpack_require__(378);
+
+var parse_jwt_1 = __webpack_require__(721);
+
+var useParseJWT = function useParseJWT(token) {
+  var JWT = react_1.useMemo(function () {
+    return parse_jwt_1.parseJWT(token);
+  }, [token]);
+  return JWT;
+};
+
+exports.useParseJWT = useParseJWT;
+
+/***/ }),
+
+/***/ 721:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.parseJWT = void 0;
+
+var parseJWT = function parseJWT(token) {
+  try {
+    if (!token) return null;
+    var base64Url = token.split(".")[1];
+    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var jsonPayload = decodeURIComponent(atob(base64).split("").map(function (c) {
+      return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(""));
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+exports.parseJWT = parseJWT;
 
 /***/ }),
 
