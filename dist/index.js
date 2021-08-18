@@ -677,211 +677,253 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.useFetch = void 0;
 
-var react_1 = __webpack_require__(297);
+var index_1 = __webpack_require__(142);
 
-var use_trigger_1 = __webpack_require__(250);
+var react_1 = __webpack_require__(297);
 
 var tuple_1 = __webpack_require__(619);
 
-var use_fetch_reducer_1 = __webpack_require__(303);
-
 var use_headers_1 = __webpack_require__(816);
 
-var useFetch = function useFetch(url) {
-  var _a = react_1.useState({}),
-      options = _a[0],
-      setOptions = _a[1];
+var fetchHandler = function fetchHandler(url, options, setHeadersHandlerCallback) {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var responseType, optionsFetch, response, body, data, _a;
 
-  var _b = use_headers_1.useHeaders(),
-      headers = _b.headers,
-      setHeadersHandler = _b.setHeadersHandler,
-      clearHeadersHandler = _b.clearHeadersHandler;
+    return __generator(this, function (_b) {
+      switch (_b.label) {
+        case 0:
+          responseType = options.responseType, optionsFetch = __rest(options, ["responseType"]);
+          return [4
+          /*yield*/
+          , fetch(url.toString(), optionsFetch)];
 
-  var _c = use_fetch_reducer_1.useFetchReducer(),
-      state = _c.state,
-      request = _c.request,
-      success = _c.success,
-      failure = _c.failure;
+        case 1:
+          response = _b.sent();
+          setHeadersHandlerCallback(response.headers);
+          if (!!response.ok) return [3
+          /*break*/
+          , 3];
+          return [4
+          /*yield*/
+          , response.json()];
 
-  var _d = use_trigger_1.useTrigger(),
-      isFetch = _d[0],
-      _e = _d[1],
-      fetchStart = _e.onHandler,
-      fetchFinish = _e.offHandler;
+        case 2:
+          body = _b.sent();
+          throw body;
 
-  react_1.useEffect(function () {
-    if (!isFetch) return;
-    var cancelRequest = false;
+        case 3:
+          data = null;
+          _a = responseType;
 
-    (function () {
-      return __awaiter(void 0, void 0, void 0, function () {
-        var responseType, optionsFetch, response, body, data, _a, error_1;
-
-        return __generator(this, function (_b) {
-          switch (_b.label) {
-            case 0:
-              _b.trys.push([0, 16,, 17]);
-
-              responseType = options.responseType, optionsFetch = __rest(options, ["responseType"]);
-              return [4
-              /*yield*/
-              , fetch(url.toString(), optionsFetch)];
-
-            case 1:
-              response = _b.sent();
-              setHeadersHandler(response.headers);
-              if (!!response.ok) return [3
-              /*break*/
-              , 3];
-              return [4
-              /*yield*/
-              , response.json()];
-
-            case 2:
-              body = _b.sent();
-              throw body;
-
-            case 3:
-              data = null;
-              _a = responseType;
-
-              switch (_a) {
-                case "text":
-                  return [3
-                  /*break*/
-                  , 4];
-
-                case "json":
-                  return [3
-                  /*break*/
-                  , 6];
-
-                case "formData":
-                  return [3
-                  /*break*/
-                  , 8];
-
-                case "blob":
-                  return [3
-                  /*break*/
-                  , 10];
-
-                case "arrayBuffer":
-                  return [3
-                  /*break*/
-                  , 12];
-              }
-
+          switch (_a) {
+            case "text":
               return [3
               /*break*/
-              , 14];
+              , 4];
 
-            case 4:
-              return [4
-              /*yield*/
-              , response.text()];
-
-            case 5:
-              data = _b.sent();
+            case "json":
               return [3
               /*break*/
-              , 15];
+              , 6];
 
-            case 6:
-              return [4
-              /*yield*/
-              , response.json()];
-
-            case 7:
-              data = _b.sent();
+            case "formData":
               return [3
               /*break*/
-              , 15];
+              , 8];
 
-            case 8:
-              return [4
-              /*yield*/
-              , response.formData()];
-
-            case 9:
-              data = _b.sent();
+            case "blob":
               return [3
               /*break*/
-              , 15];
+              , 10];
 
-            case 10:
-              return [4
-              /*yield*/
-              , response.blob()];
-
-            case 11:
-              data = _b.sent();
+            case "arrayBuffer":
               return [3
               /*break*/
-              , 15];
-
-            case 12:
-              return [4
-              /*yield*/
-              , response.arrayBuffer()];
-
-            case 13:
-              data = _b.sent();
-              return [3
-              /*break*/
-              , 15];
-
-            case 14:
-              throw new Error("Not found type of response");
-
-            case 15:
-              if (cancelRequest) return [2
-              /*return*/
-              ];
-              fetchFinish();
-              success(data);
-              return [3
-              /*break*/
-              , 17];
-
-            case 16:
-              error_1 = _b.sent();
-              if (cancelRequest) return [2
-              /*return*/
-              ];
-              fetchFinish();
-              clearHeadersHandler();
-              failure(error_1);
-              return [3
-              /*break*/
-              , 17];
-
-            case 17:
-              return [2
-              /*return*/
-              ];
+              , 12];
           }
-        });
-      });
-    })();
 
-    return function () {
-      cancelRequest = true;
-    };
-  }, [clearHeadersHandler, failure, isFetch, options, setHeadersHandler, success, url, fetchFinish]);
-  var doFetch = react_1.useCallback(function (options) {
-    request();
-    setOptions(function () {
-      return __assign({
-        responseType: "json"
-      }, options);
+          return [3
+          /*break*/
+          , 14];
+
+        case 4:
+          return [4
+          /*yield*/
+          , response.text()];
+
+        case 5:
+          data = _b.sent();
+          return [3
+          /*break*/
+          , 15];
+
+        case 6:
+          return [4
+          /*yield*/
+          , response.json()];
+
+        case 7:
+          data = _b.sent();
+          return [3
+          /*break*/
+          , 15];
+
+        case 8:
+          return [4
+          /*yield*/
+          , response.formData()];
+
+        case 9:
+          data = _b.sent();
+          return [3
+          /*break*/
+          , 15];
+
+        case 10:
+          return [4
+          /*yield*/
+          , response.blob()];
+
+        case 11:
+          data = _b.sent();
+          return [3
+          /*break*/
+          , 15];
+
+        case 12:
+          return [4
+          /*yield*/
+          , response.arrayBuffer()];
+
+        case 13:
+          data = _b.sent();
+          return [3
+          /*break*/
+          , 15];
+
+        case 14:
+          throw new Error("Not found type of response");
+
+        case 15:
+          return [2
+          /*return*/
+          , data];
+      }
     });
-    fetchStart();
-  }, [request, fetchStart]);
-  return tuple_1.tuple(state, doFetch, headers);
+  });
+};
+
+var useFetch = function useFetch(url) {
+  var _a = use_headers_1.useHeaders(),
+      headers = _a.headers,
+      setHeadersHandler = _a.setHeadersHandler;
+
+  var _b = index_1.useCallbackAsync(fetchHandler),
+      state = _b[0],
+      doFetch = _b[1];
+
+  var doFetchHandler = react_1.useCallback(function (options) {
+    return doFetch(url, __assign({
+      responseType: "json"
+    }, options), setHeadersHandler);
+  }, [doFetch, setHeadersHandler, url]);
+  return tuple_1.tuple(state, doFetchHandler, headers);
 };
 
 exports.useFetch = useFetch;
+/* export const useFetch = <TData, TError = any>(url: string) => {
+  const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
+
+  const { headers, setHeadersHandler, clearHeadersHandler } = useHeaders();
+
+  const { state, request, success, failure } = useFetchReducer<TData, TError>();
+
+  const [isFetch, { onHandler: fetchStart, offHandler: fetchFinish }] =
+    useTrigger();
+
+  useEffect(() => {
+    if (!isFetch) return;
+
+    let cancelRequest = false;
+
+    (async () => {
+      try {
+        const { responseType, ...optionsFetch } = options;
+
+        const response = await fetch(url.toString(), optionsFetch);
+
+        setHeadersHandler(response.headers);
+
+        if (!response.ok) {
+          const body = await response.json();
+          throw body;
+        }
+
+        let data = null;
+
+        switch (responseType) {
+          case "text":
+            data = await response.text();
+            break;
+          case "json":
+            data = await response.json();
+            break;
+          case "formData":
+            data = await response.formData();
+            break;
+          case "blob":
+            data = await response.blob();
+            break;
+          case "arrayBuffer":
+            data = await response.arrayBuffer();
+            break;
+          default:
+            throw new Error("Not found type of response");
+        }
+
+        if (cancelRequest) return;
+
+        fetchFinish();
+        success(data);
+      } catch (error) {
+        if (cancelRequest) return;
+
+        fetchFinish();
+        clearHeadersHandler();
+        failure(error);
+      }
+    })();
+
+    return () => {
+      cancelRequest = true;
+    };
+  }, [
+    clearHeadersHandler,
+    failure,
+    isFetch,
+    options,
+    setHeadersHandler,
+    success,
+    url,
+    fetchFinish,
+  ]);
+
+  const doFetch = useCallback(
+    (options?: UseFetchOption) => {
+      request();
+
+      setOptions(() => ({
+        responseType: "json",
+        ...options,
+      }));
+
+      fetchStart();
+    },
+    [request, fetchStart]
+  );
+
+  return tuple(state, doFetch, headers);
+}; */
 
 /***/ }),
 
