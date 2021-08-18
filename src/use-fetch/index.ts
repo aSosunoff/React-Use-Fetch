@@ -8,7 +8,7 @@ interface UseFetchOption extends RequestInit {
   responseType?: "text" | "json" | "formData" | "blob" | "arrayBuffer";
 }
 
-export const useFetchByUrl = <TData, TError = any>(url: string) => {
+export const useFetch = <TData, TError = any>(url: string) => {
   const [options, setOptions] = useState<UseFetchOption>({} as UseFetchOption);
 
   const { headers, setHeadersHandler, clearHeadersHandler } = useHeaders();
@@ -19,59 +19,57 @@ export const useFetchByUrl = <TData, TError = any>(url: string) => {
     useTrigger();
 
   useEffect(() => {
-    if (!isFetch) {
-      return;
-    }
+    if (!isFetch) return;
 
     let cancelRequest = false;
 
-    const doFetch = async () => {
-      const { responseType, ...optionsFetch } = options;
+    (async () => {
+      try {
+        const { responseType, ...optionsFetch } = options;
 
-      const response = await fetch(url.toString(), optionsFetch);
+        const response = await fetch(url.toString(), optionsFetch);
 
-      setHeadersHandler(response.headers);
+        setHeadersHandler(response.headers);
 
-      if (!response.ok) {
-        const body = await response.json();
-        throw body;
-      }
+        if (!response.ok) {
+          const body = await response.json();
+          throw body;
+        }
 
-      let data = null;
+        let data = null;
 
-      switch (responseType) {
-        case "text":
-          data = await response.text();
-          break;
-        case "json":
-          data = await response.json();
-          break;
-        case "formData":
-          data = await response.formData();
-          break;
-        case "blob":
-          data = await response.blob();
-          break;
-        case "arrayBuffer":
-          data = await response.arrayBuffer();
-          break;
-        default:
-          throw new Error("Not found type of response");
-      }
+        switch (responseType) {
+          case "text":
+            data = await response.text();
+            break;
+          case "json":
+            data = await response.json();
+            break;
+          case "formData":
+            data = await response.formData();
+            break;
+          case "blob":
+            data = await response.blob();
+            break;
+          case "arrayBuffer":
+            data = await response.arrayBuffer();
+            break;
+          default:
+            throw new Error("Not found type of response");
+        }
 
-      if (!cancelRequest) {
+        if (cancelRequest) return;
+
         fetchFinish();
         success(data);
-      }
-    };
+      } catch (error) {
+        if (cancelRequest) return;
 
-    doFetch().catch((error) => {
-      if (!cancelRequest) {
         fetchFinish();
         clearHeadersHandler();
         failure(error);
       }
-    });
+    })();
 
     return () => {
       cancelRequest = true;
