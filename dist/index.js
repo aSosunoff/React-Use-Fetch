@@ -96,6 +96,52 @@ exports.useFetchReducer = useFetchReducer;
 
 /***/ }),
 
+/***/ 714:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useLocalStorage = void 0;
+
+var react_1 = __webpack_require__(297);
+
+var tuple_1 = __webpack_require__(619);
+
+var useLocalStorage = function useLocalStorage(key, initialValue) {
+  var _a = react_1.useState(function () {
+    try {
+      var item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  }),
+      storedValue = _a[0],
+      setStoredValue = _a[1];
+
+  react_1.useEffect(function () {
+    try {
+      localStorage.setItem(key, JSON.stringify(storedValue));
+    } catch (error) {
+      console.log(error);
+    }
+  }, [key, storedValue]);
+  var setValue = react_1.useCallback(function (value) {
+    return setStoredValue(function () {
+      return value;
+    });
+  }, []);
+  return tuple_1.tuple(storedValue, setValue);
+};
+
+exports.useLocalStorage = useLocalStorage;
+
+/***/ }),
+
 /***/ 250:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -988,6 +1034,81 @@ exports.useHeaders = useHeaders;
 
 /***/ }),
 
+/***/ 403:
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.chunkArray = void 0;
+
+var chunkArray = function chunkArray(arr, size) {
+  if (size === void 0) {
+    size = 1;
+  }
+
+  var a = arr || [];
+  return Array(Math.ceil(a.length / size)).fill([]).map(function (_, inx) {
+    return a.slice(inx * size, inx * size + size);
+  });
+};
+
+exports.chunkArray = chunkArray;
+
+/***/ }),
+
+/***/ 225:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.usePagination = void 0;
+
+var chunkFromArray_1 = __webpack_require__(403);
+
+var react_1 = __webpack_require__(297);
+
+var usePagination = function usePagination(size, list) {
+  if (size === void 0) {
+    size = 5;
+  }
+
+  var _a = react_1.useState(1),
+      currentPage = _a[0],
+      setCurrentPage = _a[1];
+
+  var chunkList = react_1.useMemo(function () {
+    return chunkFromArray_1.chunkArray(list, size);
+  }, [list, size]);
+  var itemOnPage = react_1.useMemo(function () {
+    return chunkList[currentPage - 1] || chunkList[0] || [];
+  }, [chunkList, currentPage]);
+  var setPageHandler = react_1.useCallback(function (page) {
+    if (!chunkList[page - 1]) {
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(function () {
+        return page;
+      });
+    }
+  }, [chunkList]);
+  return {
+    itemOnPage: itemOnPage,
+    currentPage: currentPage,
+    pageCount: chunkList.length,
+    setPageHandler: setPageHandler
+  };
+};
+
+exports.usePagination = usePagination;
+
+/***/ }),
+
 /***/ 454:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -1109,7 +1230,7 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
+exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
 
 var use_fetch_1 = __webpack_require__(983);
 
@@ -1162,6 +1283,24 @@ Object.defineProperty(exports, "useParseJWT", ({
   enumerable: true,
   get: function get() {
     return use_parse_jwt_1.useParseJWT;
+  }
+}));
+
+var use_local_storage_1 = __webpack_require__(714);
+
+Object.defineProperty(exports, "useLocalStorage", ({
+  enumerable: true,
+  get: function get() {
+    return use_local_storage_1.useLocalStorage;
+  }
+}));
+
+var use_pagination_1 = __webpack_require__(225);
+
+Object.defineProperty(exports, "usePagination", ({
+  enumerable: true,
+  get: function get() {
+    return use_pagination_1.usePagination;
   }
 }));
 })();
