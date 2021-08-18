@@ -4,3 +4,4 @@ export { useFetchReducer } from "./hooks/use-fetch-reducer";
 export { useTrigger } from "./hooks/use-trigger";
 export { useWhyDidYouUpdate } from "./hooks/use-why-did-you-update";
 export { useParseJWT } from "./use-parse-jwt";
+export { useLocalStorage } from "./hooks/use-local-storage";
