@@ -49,12 +49,12 @@ export const useFetchReducer = <TData, TError>() => {
   const request = useCallback(() => dispatch({ type: "request" }), []);
 
   const success = useCallback(
-    (payload) => dispatch({ type: "success", payload }),
+    (payload?) => dispatch({ type: "success", payload }),
     []
   );
 
   const failure = useCallback(
-    (payload) => dispatch({ type: "failure", payload }),
+    (payload?) => dispatch({ type: "failure", payload }),
     []
   );
 
