@@ -495,7 +495,7 @@ exports.useParams = useParams;
 
 /***/ }),
 
-/***/ 36:
+/***/ 983:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -675,7 +675,7 @@ var __rest = this && this.__rest || function (s, e) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useFetchByUrl = void 0;
+exports.useFetch = void 0;
 
 var react_1 = __webpack_require__(297);
 
@@ -685,9 +685,9 @@ var tuple_1 = __webpack_require__(619);
 
 var use_fetch_reducer_1 = __webpack_require__(303);
 
-var use_headers_1 = __webpack_require__(644);
+var use_headers_1 = __webpack_require__(816);
 
-var useFetchByUrl = function useFetchByUrl(url) {
+var useFetch = function useFetch(url) {
   var _a = react_1.useState({}),
       options = _a[0],
       setOptions = _a[1];
@@ -710,19 +710,18 @@ var useFetchByUrl = function useFetchByUrl(url) {
       fetchFinish = _e.offHandler;
 
   react_1.useEffect(function () {
-    if (!isFetch) {
-      return;
-    }
-
+    if (!isFetch) return;
     var cancelRequest = false;
 
-    var doFetch = function doFetch() {
+    (function () {
       return __awaiter(void 0, void 0, void 0, function () {
-        var responseType, optionsFetch, response, body, data, _a;
+        var responseType, optionsFetch, response, body, data, _a, error_1;
 
         return __generator(this, function (_b) {
           switch (_b.label) {
             case 0:
+              _b.trys.push([0, 16,, 17]);
+
               responseType = options.responseType, optionsFetch = __rest(options, ["responseType"]);
               return [4
               /*yield*/
@@ -836,26 +835,36 @@ var useFetchByUrl = function useFetchByUrl(url) {
               throw new Error("Not found type of response");
 
             case 15:
-              if (!cancelRequest) {
-                fetchFinish();
-                success(data);
-              }
+              if (cancelRequest) return [2
+              /*return*/
+              ];
+              fetchFinish();
+              success(data);
+              return [3
+              /*break*/
+              , 17];
 
+            case 16:
+              error_1 = _b.sent();
+              if (cancelRequest) return [2
+              /*return*/
+              ];
+              fetchFinish();
+              clearHeadersHandler();
+              failure(error_1);
+              return [3
+              /*break*/
+              , 17];
+
+            case 17:
               return [2
               /*return*/
               ];
           }
         });
       });
-    };
+    })();
 
-    doFetch()["catch"](function (error) {
-      if (!cancelRequest) {
-        fetchFinish();
-        clearHeadersHandler();
-        failure(error);
-      }
-    });
     return function () {
       cancelRequest = true;
     };
@@ -872,11 +881,11 @@ var useFetchByUrl = function useFetchByUrl(url) {
   return tuple_1.tuple(state, doFetch, headers);
 };
 
-exports.useFetchByUrl = useFetchByUrl;
+exports.useFetch = useFetch;
 
 /***/ }),
 
-/***/ 644:
+/***/ 816:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1058,14 +1067,14 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetchByUrl = void 0;
+exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
 
-var use_fetch_by_url_1 = __webpack_require__(36);
+var use_fetch_1 = __webpack_require__(983);
 
-Object.defineProperty(exports, "useFetchByUrl", ({
+Object.defineProperty(exports, "useFetch", ({
   enumerable: true,
   get: function get() {
-    return use_fetch_by_url_1.useFetchByUrl;
+    return use_fetch_1.useFetch;
   }
 }));
 

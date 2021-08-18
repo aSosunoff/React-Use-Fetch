@@ -1,4 +1,4 @@
-export { useFetchByUrl } from "./use-fetch-by-url";
+export { useFetch } from "./use-fetch";
 export { useCallbackAsync } from "./use-callback-async";
 export { useFetchReducer } from "./hooks/use-fetch-reducer";
 export { useTrigger } from "./hooks/use-trigger";
