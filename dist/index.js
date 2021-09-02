@@ -2,6 +2,34 @@ define(["react"], (__WEBPACK_EXTERNAL_MODULE__297__) => { return /******/ (() =>
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 897:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useDidUpdate = void 0;
+
+var react_1 = __webpack_require__(297);
+
+var useDidUpdate = function useDidUpdate(effect, dependencies) {
+  var hasMounted = react_1.useRef(true);
+  react_1.useEffect(function () {
+    if (hasMounted.current) {
+      hasMounted.current = false;
+      return;
+    }
+
+    return effect(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, dependencies);
+};
+
+exports.useDidUpdate = useDidUpdate;
+
+/***/ }),
+
 /***/ 303:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -1230,7 +1258,7 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
+exports.useDidUpdate = exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
 
 var use_fetch_1 = __webpack_require__(983);
 
@@ -1301,6 +1329,15 @@ Object.defineProperty(exports, "usePagination", ({
   enumerable: true,
   get: function get() {
     return use_pagination_1.usePagination;
+  }
+}));
+
+var use_did_update_1 = __webpack_require__(897);
+
+Object.defineProperty(exports, "useDidUpdate", ({
+  enumerable: true,
+  get: function get() {
+    return use_did_update_1.useDidUpdate;
   }
 }));
 })();

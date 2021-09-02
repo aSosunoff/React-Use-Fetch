@@ -6,3 +6,4 @@ export { useWhyDidYouUpdate } from "./hooks/use-why-did-you-update";
 export { useParseJWT } from "./use-parse-jwt";
 export { useLocalStorage } from "./hooks/use-local-storage";
 export { usePagination } from "./use-pagination";
+export { useDidUpdate } from "./hooks/use-did-update";
