@@ -2,6 +2,34 @@ define(["react"], (__WEBPACK_EXTERNAL_MODULE__297__) => { return /******/ (() =>
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 907:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useChangeArrayLength = void 0;
+
+var react_1 = __webpack_require__(297);
+
+var __1 = __webpack_require__(447);
+
+var useChangeArrayLength = function useChangeArrayLength(arr, fn) {
+  var prevArrayLength = __1.usePrevState(arr.length);
+
+  react_1.useEffect(function () {
+    if (prevArrayLength === undefined) return;
+    if (arr.length === prevArrayLength) return;
+    fn();
+  }, [arr.length, fn, prevArrayLength]);
+};
+
+exports.useChangeArrayLength = useChangeArrayLength;
+
+/***/ }),
+
 /***/ 897:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -170,6 +198,30 @@ exports.useLocalStorage = useLocalStorage;
 
 /***/ }),
 
+/***/ 95:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.usePrevState = void 0;
+
+var react_1 = __webpack_require__(297);
+
+var usePrevState = function usePrevState(state) {
+  var prev = react_1.useRef();
+  react_1.useEffect(function () {
+    prev.current = state;
+  }, [state]);
+  return prev.current;
+};
+
+exports.usePrevState = usePrevState;
+
+/***/ }),
+
 /***/ 250:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -272,6 +324,117 @@ var useWhyDidYouUpdate = function useWhyDidYouUpdate(props, callback) {
 };
 
 exports.useWhyDidYouUpdate = useWhyDidYouUpdate;
+
+/***/ }),
+
+/***/ 447:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useChangeArrayLength = exports.usePrevState = exports.useDidUpdate = exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
+
+var use_fetch_1 = __webpack_require__(983);
+
+Object.defineProperty(exports, "useFetch", ({
+  enumerable: true,
+  get: function get() {
+    return use_fetch_1.useFetch;
+  }
+}));
+
+var use_callback_async_1 = __webpack_require__(142);
+
+Object.defineProperty(exports, "useCallbackAsync", ({
+  enumerable: true,
+  get: function get() {
+    return use_callback_async_1.useCallbackAsync;
+  }
+}));
+
+var use_fetch_reducer_1 = __webpack_require__(303);
+
+Object.defineProperty(exports, "useFetchReducer", ({
+  enumerable: true,
+  get: function get() {
+    return use_fetch_reducer_1.useFetchReducer;
+  }
+}));
+
+var use_trigger_1 = __webpack_require__(250);
+
+Object.defineProperty(exports, "useTrigger", ({
+  enumerable: true,
+  get: function get() {
+    return use_trigger_1.useTrigger;
+  }
+}));
+
+var use_why_did_you_update_1 = __webpack_require__(44);
+
+Object.defineProperty(exports, "useWhyDidYouUpdate", ({
+  enumerable: true,
+  get: function get() {
+    return use_why_did_you_update_1.useWhyDidYouUpdate;
+  }
+}));
+
+var use_parse_jwt_1 = __webpack_require__(454);
+
+Object.defineProperty(exports, "useParseJWT", ({
+  enumerable: true,
+  get: function get() {
+    return use_parse_jwt_1.useParseJWT;
+  }
+}));
+
+var use_local_storage_1 = __webpack_require__(714);
+
+Object.defineProperty(exports, "useLocalStorage", ({
+  enumerable: true,
+  get: function get() {
+    return use_local_storage_1.useLocalStorage;
+  }
+}));
+
+var use_pagination_1 = __webpack_require__(225);
+
+Object.defineProperty(exports, "usePagination", ({
+  enumerable: true,
+  get: function get() {
+    return use_pagination_1.usePagination;
+  }
+}));
+
+var use_did_update_1 = __webpack_require__(897);
+
+Object.defineProperty(exports, "useDidUpdate", ({
+  enumerable: true,
+  get: function get() {
+    return use_did_update_1.useDidUpdate;
+  }
+}));
+
+var use_prev_state_1 = __webpack_require__(95);
+
+Object.defineProperty(exports, "usePrevState", ({
+  enumerable: true,
+  get: function get() {
+    return use_prev_state_1.usePrevState;
+  }
+}));
+
+var use_change_array_length_1 = __webpack_require__(907);
+
+Object.defineProperty(exports, "useChangeArrayLength", ({
+  enumerable: true,
+  get: function get() {
+    return use_change_array_length_1.useChangeArrayLength;
+  }
+}));
 
 /***/ }),
 
@@ -1249,99 +1412,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__297__;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-var exports = __webpack_exports__;
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.useDidUpdate = exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
-
-var use_fetch_1 = __webpack_require__(983);
-
-Object.defineProperty(exports, "useFetch", ({
-  enumerable: true,
-  get: function get() {
-    return use_fetch_1.useFetch;
-  }
-}));
-
-var use_callback_async_1 = __webpack_require__(142);
-
-Object.defineProperty(exports, "useCallbackAsync", ({
-  enumerable: true,
-  get: function get() {
-    return use_callback_async_1.useCallbackAsync;
-  }
-}));
-
-var use_fetch_reducer_1 = __webpack_require__(303);
-
-Object.defineProperty(exports, "useFetchReducer", ({
-  enumerable: true,
-  get: function get() {
-    return use_fetch_reducer_1.useFetchReducer;
-  }
-}));
-
-var use_trigger_1 = __webpack_require__(250);
-
-Object.defineProperty(exports, "useTrigger", ({
-  enumerable: true,
-  get: function get() {
-    return use_trigger_1.useTrigger;
-  }
-}));
-
-var use_why_did_you_update_1 = __webpack_require__(44);
-
-Object.defineProperty(exports, "useWhyDidYouUpdate", ({
-  enumerable: true,
-  get: function get() {
-    return use_why_did_you_update_1.useWhyDidYouUpdate;
-  }
-}));
-
-var use_parse_jwt_1 = __webpack_require__(454);
-
-Object.defineProperty(exports, "useParseJWT", ({
-  enumerable: true,
-  get: function get() {
-    return use_parse_jwt_1.useParseJWT;
-  }
-}));
-
-var use_local_storage_1 = __webpack_require__(714);
-
-Object.defineProperty(exports, "useLocalStorage", ({
-  enumerable: true,
-  get: function get() {
-    return use_local_storage_1.useLocalStorage;
-  }
-}));
-
-var use_pagination_1 = __webpack_require__(225);
-
-Object.defineProperty(exports, "usePagination", ({
-  enumerable: true,
-  get: function get() {
-    return use_pagination_1.usePagination;
-  }
-}));
-
-var use_did_update_1 = __webpack_require__(897);
-
-Object.defineProperty(exports, "useDidUpdate", ({
-  enumerable: true,
-  get: function get() {
-    return use_did_update_1.useDidUpdate;
-  }
-}));
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(447);
+/******/ 	
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
