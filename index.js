@@ -391,6 +391,34 @@ react_dom_1["default"].render(jsx_runtime_1.jsx(app_1["default"], {}, void 0), d
 
 /***/ }),
 
+/***/ 924:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useChangeArrayLength = void 0;
+
+var react_1 = __webpack_require__(378);
+
+var __1 = __webpack_require__(819);
+
+var useChangeArrayLength = function useChangeArrayLength(arr, fn) {
+  var prevArrayLength = __1.usePrevState(arr.length);
+
+  react_1.useEffect(function () {
+    if (prevArrayLength === undefined) return;
+    if (arr.length === prevArrayLength) return;
+    fn();
+  }, [arr.length, fn, prevArrayLength]);
+};
+
+exports.useChangeArrayLength = useChangeArrayLength;
+
+/***/ }),
+
 /***/ 462:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -559,6 +587,30 @@ exports.useLocalStorage = useLocalStorage;
 
 /***/ }),
 
+/***/ 694:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.usePrevState = void 0;
+
+var react_1 = __webpack_require__(378);
+
+var usePrevState = function usePrevState(state) {
+  var prev = react_1.useRef();
+  react_1.useEffect(function () {
+    prev.current = state;
+  }, [state]);
+  return prev.current;
+};
+
+exports.usePrevState = usePrevState;
+
+/***/ }),
+
 /***/ 363:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -672,7 +724,7 @@ exports.useWhyDidYouUpdate = useWhyDidYouUpdate;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useDidUpdate = exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
+exports.useChangeArrayLength = exports.usePrevState = exports.useDidUpdate = exports.usePagination = exports.useLocalStorage = exports.useParseJWT = exports.useWhyDidYouUpdate = exports.useTrigger = exports.useFetchReducer = exports.useCallbackAsync = exports.useFetch = void 0;
 
 var use_fetch_1 = __webpack_require__(1);
 
@@ -752,6 +804,24 @@ Object.defineProperty(exports, "useDidUpdate", ({
   enumerable: true,
   get: function get() {
     return use_did_update_1.useDidUpdate;
+  }
+}));
+
+var use_prev_state_1 = __webpack_require__(694);
+
+Object.defineProperty(exports, "usePrevState", ({
+  enumerable: true,
+  get: function get() {
+    return use_prev_state_1.usePrevState;
+  }
+}));
+
+var use_change_array_length_1 = __webpack_require__(924);
+
+Object.defineProperty(exports, "useChangeArrayLength", ({
+  enumerable: true,
+  get: function get() {
+    return use_change_array_length_1.useChangeArrayLength;
   }
 }));
 
