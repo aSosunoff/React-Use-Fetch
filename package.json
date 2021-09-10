@@ -75,6 +75,7 @@
     "demo2": "cross-env DEMO_PATH=demo_2 webpack serve --mode development --open",
     "demo3": "cross-env DEMO_PATH=demo_3 webpack serve --mode development --open",
     "demo_prev_state": "cross-env DEMO_PATH=demo_prev_state webpack serve --mode development --open",
+    "demo_change_array_length": "cross-env DEMO_PATH=demo_change_array_length webpack serve --mode development --open",
     "predeploy": "cross-env GP_DEPLOY=true CONFIG=production webpack --mode production",
     "deploy": "gh-pages -d build",
     "lint": "eslint src demo",
