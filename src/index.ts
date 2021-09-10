@@ -8,3 +8,4 @@ export { useLocalStorage } from "./hooks/use-local-storage";
 export { usePagination } from "./use-pagination";
 export { useDidUpdate } from "./hooks/use-did-update";
 export { usePrevState } from "./hooks/use-prev-state";
+export { useChangeArrayLength } from "./hooks/use-change-array-length";
