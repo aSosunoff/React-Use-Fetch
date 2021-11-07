@@ -1,4 +1,14 @@
-define(["react"], (__WEBPACK_EXTERNAL_MODULE__297__) => { return /******/ (() => { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("react"));
+	else if(typeof define === 'function' && define.amd)
+		define(["react"], factory);
+	else {
+		var a = typeof exports === 'object' ? factory(require("react")) : factory(root["react"]);
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(self, function(__WEBPACK_EXTERNAL_MODULE__297__) {
+return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
@@ -1421,5 +1431,5 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__297__;
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
-});;
+});
 //# sourceMappingURL=index.js.map

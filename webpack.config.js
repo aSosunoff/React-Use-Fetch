@@ -37,10 +37,14 @@ const CONFIGS = {
     output: {
       filename: fileName("js"),
       path: path.resolve(__dirname, "./dist"),
-      libraryTarget: "amd",
+      // libraryTarget: "amd",
+      library: {
+        type: "umd",
+      },
     },
     externals: {
-      react: "amd react",
+      /* react: "amd react", */
+      react: "umd react",
       /* "react-dom": "amd react-dom", */
     },
     optimization: {
